@@ -170,3 +170,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .markdownlint.json
+.ia_venv/
