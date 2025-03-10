@@ -37,14 +37,14 @@ class PerceptronModel(Module):
         """
         super(PerceptronModel, self).__init__()
         
-        "*** YOUR CODE HERE ***"
+        self.weight = Parameter(ones(1, dimensions))
         
 
     def get_weights(self):
         """
         Return a Parameter instance with the current weights of the perceptron.
         """
-        return self.w
+        return self.weight
 
     def run(self, x):
         """
@@ -56,7 +56,7 @@ class PerceptronModel(Module):
 
         The pytorch function `tensordot` may be helpful here.
         """
-        "*** YOUR CODE HERE ***"
+        return torch.tensordot(self.weight, x, dims=1)
         
 
     def get_prediction(self, x):
@@ -65,7 +65,7 @@ class PerceptronModel(Module):
 
         Returns: 1 or -1
         """
-        "*** YOUR CODE HERE ***"
+        return 1 if self.run(x) > 0 else -1
 
 
 
@@ -77,10 +77,31 @@ class PerceptronModel(Module):
 
         Each sample in the dataloader is in the form {'x': features, 'label': label} where label
         is the item we need to predict based off of its features.
-        """        
-        with no_grad():
-            dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-            "*** YOUR CODE HERE ***"
+        """
+        dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
+        flag_continue = True
+        
+        while flag_continue:
+            flag_continue = False  # Suponemos que terminamos la iteración sin errores
+
+            for batch in dataloader:
+                x = batch['x']  # Features
+                label_train = batch['label']  # Etiqueta real
+
+                # Hacer la predicción
+                label_predict = self.get_prediction(x)  # Llamamos al método get_prediction
+
+                # Si la predicción es incorrecta, actualizamos el peso
+                if label_predict != label_train:
+                    # Actualizamos el peso usando la regla del perceptrón
+                    # Actualizamos el peso en la dirección del vector de características
+                    self.weight += label_train * x.squeeze()  # Squeeze para asegurarnos de que es un vector 1D
+
+                    # Si encontramos un error, seguimos entrenando
+                    flag_continue = True
+
+        print("Entrenamiento completado")
+                
 
 
 
