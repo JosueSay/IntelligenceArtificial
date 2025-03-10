@@ -1,23 +1,19 @@
-# IntelligenceArtificial
+# Inteligencia Artificial
 
 ## Materiales
 
-https://ai.berkeley.edu/project_overview.html
+Consulta los materiales disponibles para este proyecto en el siguiente enlace:
 
-## Guia
+- [Visión general del proyecto - AI Berkeley](https://ai.berkeley.edu/project_overview.html)
 
-https://ai.berkeley.edu/project_instructions.html
+## Guía
+
+Para obtener instrucciones detalladas sobre cómo llevar a cabo el proyecto, visita la siguiente guía:
+
+- [Instrucciones del proyecto - AI Berkeley](https://ai.berkeley.edu/project_instructions.html)
 
 ## Especificaciones
 
-https://inst.eecs.berkeley.edu/~cs188/sp25/projects/proj5/#question-3-6-points-digit-classification
+Revisa las especificaciones detalladas para las preguntas del proyecto en el siguiente enlace:
 
-
-## Problemas
-
-
-### Problema 1: Perceptron binario
-
-### Problema 2: Regresión no-lineal
-
-### Problema 3: Red neuronal
+- [Especificaciones del proyecto - Berkeley CS188](https://inst.eecs.berkeley.edu/~cs188/sp25/projects/proj5/#question-3-6-points-digit-classification)
