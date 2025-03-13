@@ -78,8 +78,6 @@ El problema se puede representar como un **árbol de decisiones**, donde cada no
   - Si forman un árbol válido (conectan todos los nodos sin ciclos), se evalúa su costo.
   - Si no forman un árbol válido, se descartan.
 
-A continuación, se muestra un ejemplo con un grafo de 4 vértices y 5 aristas con pesos asociados.
-
 ```mermaid
 graph TD
 
