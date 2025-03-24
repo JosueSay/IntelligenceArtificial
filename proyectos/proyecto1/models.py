@@ -2,7 +2,6 @@ from torch import no_grad, stack
 from torch.utils.data import DataLoader
 from torch.nn import Module
 
-
 """
 Functions you should use.
 Please avoid importing any other functions or modules.
@@ -37,7 +36,7 @@ class PerceptronModel(Module):
         """
         super(PerceptronModel, self).__init__()
         
-        self.weight = Parameter(ones(1, dimensions))
+        self.weight = Parameter(torch.ones((1, dimensions)))
         
 
     def get_weights(self):
@@ -56,8 +55,7 @@ class PerceptronModel(Module):
 
         The pytorch function `tensordot` may be helpful here.
         """
-        return torch.tensordot(self.weight, x, dims=1)
-        
+        return torch.tensordot(self.weight, x, dims=([1], [1])).squeeze()
 
     def get_prediction(self, x):
         """
@@ -65,7 +63,8 @@ class PerceptronModel(Module):
 
         Returns: 1 or -1
         """
-        return 1 if self.run(x) > 0 else -1
+        score = self.run(x)
+        return torch.where(score >= 0, 1, -1)
 
 
 
@@ -79,29 +78,18 @@ class PerceptronModel(Module):
         is the item we need to predict based off of its features.
         """
         dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-        flag_continue = True
-        
-        while flag_continue:
-            flag_continue = False  # Suponemos que terminamos la iteración sin errores
-
-            for batch in dataloader:
-                x = batch['x']  # Features
-                label_train = batch['label']  # Etiqueta real
-
-                # Hacer la predicción
-                label_predict = self.get_prediction(x)  # Llamamos al método get_prediction
-
-                # Si la predicción es incorrecta, actualizamos el peso
-                if label_predict != label_train:
-                    # Actualizamos el peso usando la regla del perceptrón
-                    # Actualizamos el peso en la dirección del vector de características
-                    self.weight += label_train * x.squeeze()  # Squeeze para asegurarnos de que es un vector 1D
-
-                    # Si encontramos un error, seguimos entrenando
-                    flag_continue = True
-
-        print("Entrenamiento completado")
-                
+        with no_grad():
+            converged = False
+            while not converged:
+                errors = 0
+                for batch in dataloader:
+                    x, y = batch['x'], batch['label']
+                    prediction = self.get_prediction(x)
+                    if prediction.item() != y.item():
+                        self.weight += y * x
+                        errors += 1
+                if errors == 0:
+                    converged = True
 
 
 
