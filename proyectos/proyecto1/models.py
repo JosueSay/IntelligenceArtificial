@@ -1,5 +1,5 @@
 from torch import no_grad, stack
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from torch.nn import Module
 
 """
@@ -68,7 +68,7 @@ class PerceptronModel(Module):
 
 
 
-    def train(self, dataset):
+    def train(self, dataset, useValidation=False, validationSplit=0.2):
         """
         Train the perceptron until convergence.
         You can iterate through DataLoader in order to 
@@ -77,12 +77,23 @@ class PerceptronModel(Module):
         Each sample in the dataloader is in the form {'x': features, 'label': label} where label
         is the item we need to predict based off of its features.
         """
-        dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
+        if useValidation:
+            from torch.utils.data import random_split
+
+            total_size = len(dataset)
+            val_size = int(total_size * validationSplit)
+            train_size = total_size - val_size
+
+            train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+            train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
+            val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
+        else:
+            train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
         with no_grad():
             converged = False
             while not converged:
                 errors = 0
-                for batch in dataloader:
+                for batch in train_loader:
                     x, y = batch['x'], batch['label']
                     prediction = self.get_prediction(x)
                     if prediction.item() != y.item():
@@ -90,6 +101,19 @@ class PerceptronModel(Module):
                         errors += 1
                 if errors == 0:
                     converged = True
+
+        if useValidation:
+            correct = 0
+            total = 0
+            for batch in val_loader:
+                x, y = batch['x'], batch['label']
+                prediction = self.get_prediction(x)
+                if prediction.item() == y.item():
+                    correct += 1
+                total += 1
+
+            val_accuracy = correct / total * 100
+            print(f"Validation accuracy: {val_accuracy:.2f}%")
 
 
 

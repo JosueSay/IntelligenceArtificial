@@ -63,19 +63,45 @@ return torch.where(score >= 0, 1, -1)
 **5. Función de entrenamiento (`train`)**
 
 ```python
-dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-with no_grad():
-    converged = False
-    while not converged:
-        errors = 0
-        for batch in dataloader:
+def train(self, dataset, use_validation=True, validation_split=0.2):
+    if use_validation:
+        from torch.utils.data import random_split
+
+        total_size = len(dataset)
+        val_size = int(total_size * validation_split)
+        train_size = total_size - val_size
+
+        train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+        train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
+        val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
+    else:
+        train_loader = DataLoader(dataset, batch_size=1, shuffle=True)
+
+    with no_grad():
+        converged = False
+        while not converged:
+            errors = 0
+            for batch in train_loader:
+                x, y = batch['x'], batch['label']
+                prediction = self.get_prediction(x)
+                if prediction.item() != y.item():
+                    self.weight += y * x
+                    errors += 1
+            if errors == 0:
+                converged = True
+
+    if use_validation:
+        correct = 0
+        total = 0
+        for batch in val_loader:
             x, y = batch['x'], batch['label']
             prediction = self.get_prediction(x)
-            if prediction.item() != y.item():
-                self.weight += y * x
-                errors += 1
-        if errors == 0:
-            converged = True
+            if prediction.item() == y.item():
+                correct += 1
+            total += 1
+
+        val_accuracy = correct / total * 100
+        print(f"Validation accuracy: {val_accuracy:.2f}%")
 ```
 
 - **¿Cómo funciona el entrenamiento?**  
@@ -85,6 +111,10 @@ with no_grad():
      - Si la etiqueta real es `+1`, suma el dato al peso.  
      - Si la etiqueta real es `-1`, resta el dato al peso.
   4. Si durante una pasada completa no hay errores, significa que el perceptrón aprendió perfectamente a clasificar todos los datos, y se detiene el entrenamiento.
+
+- **¿Por qué lo hicimos?**
+  - Añadimos la opción de dividir los datos en conjuntos de entrenamiento y validación para evaluar el rendimiento del modelo en datos que no ha visto durante el entrenamiento.
+  - Esta práctica ayuda a prevenir sesgos en los resultados, permitiendo obtener una estimación más realista de cómo funcionará el modelo en datos nuevos.
 
 ## ¿Por qué funcionó finalmente?
 
