@@ -213,73 +213,43 @@ class RegressionModel(Module):
 
 
 
-
-
 class DigitClassificationModel(Module):
-    """
-    A model for handwritten digit classification using the MNIST dataset.
-
-    Each handwritten digit is a 28x28 pixel grayscale image, which is flattened
-    into a 784-dimensional vector for the purposes of this model. Each entry in
-    the vector is a floating point number between 0 and 1.
-
-    The goal is to sort each digit into one of 10 classes (number 0 through 9).
-
-    (See RegressionModel for more information about the APIs of different
-    methods here. We recommend that you implement the RegressionModel before
-    working on this part of the project.)
-    """
-    def __init__(self):
-        # Initialize your model parameters here
-        super().__init__()
-        input_size = 28 * 28
+    def _init_(self):
+        super(DigitClassificationModel, self)._init_()
+        input_size = 784
+        hidden_sizes = [150, 50, 50]
         output_size = 10
-        "*** YOUR CODE HERE ***"
 
+        self.fc1 = Linear(input_size, hidden_sizes[0])
+        self.fc2 = Linear(hidden_sizes[0], hidden_sizes[1])
+        self.fc3 = Linear(hidden_sizes[1], hidden_sizes[2])
+        self.fc4 = Linear(hidden_sizes[2], output_size)
 
-
+        self.optimizer = optim.Adam(self.parameters(), lr=0.001)
 
     def run(self, x):
-        """
-        Runs the model for a batch of examples.
-
-        Your model should predict a node with shape (batch_size x 10),
-        containing scores. Higher scores correspond to greater probability of
-        the image belonging to a particular class.
-
-        Inputs:
-            x: a tensor with shape (batch_size x 784)
-        Output:
-            A node with shape (batch_size x 10) containing predicted scores
-                (also called logits)
-        """
-        """ YOUR CODE HERE """
-
- 
+        x = relu(self.fc1(x))
+        x = relu(self.fc2(x))
+        x = relu(self.fc3(x))
+        logits = self.fc4(x)  # sin activación en la última capa
+        return logits
 
     def get_loss(self, x, y):
-        """
-        Computes the loss for a batch of examples.
+        logits = self.run(x)
+        return cross_entropy(logits, y)
 
-        The correct labels `y` are represented as a tensor with shape
-        (batch_size x 10). Each row is a one-hot vector encoding the correct
-        digit class (0-9).
+    def train(self, dataset, epochs=10, batch_size=64):
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
-        Inputs:
-            x: a node with shape (batch_size x 784)
-            y: a node with shape (batch_size x 10)
-        Returns: a loss tensor
-        """
-        """ YOUR CODE HERE """
+        for epoch in range(epochs):
+            super().train()  # Activa modo entrenamiento del módulo PyTorch
+            for batch in dataloader:
+                x, y = batch['x'], batch['label']
+                loss = self.get_loss(x, y)
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
 
-    
-        
-
-    def train(self, dataset):
-        """
-        Trains the model.
-        """
-        """ YOUR CODE HERE """
 
 
 
@@ -495,3 +465,4 @@ class Attention(Module):
         """YOUR CODE HERE"""
 
      
+
