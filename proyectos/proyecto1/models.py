@@ -127,6 +127,10 @@ class RegressionModel(Module):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
         super().__init__()
+        self.inp = Linear(1, 150)
+        self.layer = Linear(150, 150)
+        self.out = Linear(150, 1)
+
 
 
 
@@ -140,6 +144,10 @@ class RegressionModel(Module):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** YOUR CODE HERE ***"
+        x = relu(self.inp(x))  
+        x = relu(self.layer(x))
+        x = self.out(x) 
+        return x
 
     
     def get_loss(self, x, y):
@@ -153,6 +161,8 @@ class RegressionModel(Module):
         Returns: a tensor of size 1 containing the loss
         """
         "*** YOUR CODE HERE ***"
+        predictions = self.forward(x)
+        return mse_loss(predictions, y)
  
         
 
@@ -171,7 +181,32 @@ class RegressionModel(Module):
             
         """
         "*** YOUR CODE HERE ***"
+        data = DataLoader(dataset, batch_size=70, shuffle=True)
+        optimizer = optim.Adam(self.parameters(), lr=0.001)
+        epochs = 2000
 
+        
+        for epoch in range(epochs):
+            total_loss = 0.0
+            for batch in data:
+                x_batch, y_batch = batch['x'], batch['label']
+
+                optimizer.zero_grad()
+                predictions = self(x_batch)
+                loss = self.get_loss(x_batch, y_batch)  
+                loss.backward()  
+                optimizer.step()  
+
+                total_loss += loss.item()
+
+            avg_loss = total_loss / len(data)  
+
+            if epoch % 200 == 0:
+                print(f"Epoch {epoch}/{epochs} - Perdida: {avg_loss:.6f}")
+
+            if avg_loss <= 0.001:
+                print(f"Deteniendo en la itreación {epoch} con perdida de {avg_loss:.6f}")
+                break
             
 
 
