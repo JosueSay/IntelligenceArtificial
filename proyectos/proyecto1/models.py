@@ -63,12 +63,11 @@ class PerceptronModel(Module):
 
         Returns: 1 or -1
         """
-        score = self.run(x)
-        return torch.where(score >= 0, 1, -1)
+        return torch.where(self.run(x) >= 0, 1, -1)
 
 
 
-    def train(self, dataset, useValidation=False, validationSplit=0.2):
+    def train(self, dataset, useValidation=True, validationSplit=0.2):
         """
         Train the perceptron until convergence.
         You can iterate through DataLoader in order to 
@@ -78,12 +77,9 @@ class PerceptronModel(Module):
         is the item we need to predict based off of its features.
         """
         if useValidation:
-            from torch.utils.data import random_split
-
             total_size = len(dataset)
             val_size = int(total_size * validationSplit)
             train_size = total_size - val_size
-
             train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
             train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
             val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
