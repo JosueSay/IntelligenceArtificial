@@ -208,10 +208,9 @@ class RegressionModel(Module):
 
 
 
-
 class DigitClassificationModel(Module):
-    def _init_(self):
-        super(DigitClassificationModel, self)._init_()
+    def __init__(self):
+        super(DigitClassificationModel, self).__init__()
         input_size = 784
         hidden_sizes = [150, 50, 50]
         output_size = 10
@@ -245,8 +244,6 @@ class DigitClassificationModel(Module):
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
-
-
 
 
 class LanguageIDModel(Module):
