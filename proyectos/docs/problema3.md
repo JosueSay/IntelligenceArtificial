@@ -28,6 +28,7 @@ self.fc4 = Linear(50, 10)  # logits (sin ReLU aquí)
 ## Funciones Principales
 
 ### `run(x)`
+
 Ejecuta una forward pass por la red. Aplica activaciones ReLU en todas las capas excepto la última.
 
 ```python
@@ -39,9 +40,11 @@ return logits
 ```
 
 ### `get_loss(x, y)`
+
 Calcula la pérdida entre las predicciones (logits) y las etiquetas verdaderas y usando entropía cruzada.
 
 ### `train(dataset, epochs=...)`
+
 Entrena el modelo usando descenso de gradiente con Adam (lr=0.001). El entrenamiento se ejecuta por varias épocas sobre el conjunto de entrenamiento.
 
 ## Evaluación del Modelo
@@ -55,7 +58,6 @@ Entrena el modelo usando descenso de gradiente con Adam (lr=0.001). El entrenami
 - Si la precisión no mejora después de algunas épocas, puedes detener el entrenamiento antes.
 - No aplicar softmax manualmente a la salida, ya que la función `cross_entropy()` se encarga internamente de eso.
 - Asegurarse de que los datos estén bien normalizados (por ejemplo, escalados entre 0 y 1).
-
 
 ## Cómo ejecutar en un entorno virtual
 
@@ -77,17 +79,12 @@ En bash/zsh:
 source venv/bin/activate
 ```
 
-
 ### Paso 3: Instalar las dependencias
-
 
 ```bash
 pip install -r requirements.txt
 ```
 
-
 ```bash
 pip install -r ../otra_carpeta/requirements.txt
-```
-
 ```

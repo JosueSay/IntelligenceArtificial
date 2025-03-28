@@ -91,6 +91,149 @@ Otro aspecto relevante es la importancia del **orden aleatorio (shuffle)** en lo
 
 Finalmente, las pruebas realizadas sobre el conjunto de validación confirmaron el éxito del entrenamiento, mostrando que el modelo logró clasificar correctamente los datos según la frontera aprendida.
 
-## Problema 2 - Regresión no-lineal
+## Problema 2 - Red Neuronal - Regresión no-lineal - Cálculo de la función sen(x)
+
+Este problema aborda la implementación de una red neuronal feedforward (también conocida como red multicapa o MLP) que implementa un algoritmo de regresión no lineal para calcular la función sen(x) con x entre -2π y y 2π .
+
+### Objetivo del Modelo
+
+El objetivo del modelo es recibir un valor x entre -2π y y 2π  y devolver volver un valor y que representa el valor de x evaluado en la función seno. Para entrenar esta red, se usa el error medio cuadrado (mse_loss), ideal para modelos de regresión
+
+### Arquitectura del Modelo
+
+El modelo está definido en la clase `RegressionModel`, y tiene la siguiente arquitectura:
+
+- Capa de Entrada: 1 entrada y 150 salidas, activación RelU
+- Capa Oculta 1: 150 entradas y 150 salidas, activación ReLU
+- Capa de salida 150 entradas y 1 salida, sin activación final
+
+```python
+super().__init__()
+self.inp = Linear(1, 150)
+self.layer = Linear(150, 150)
+self.out = Linear(150, 1)
+```
+
+### Funciones Principales
+
+#### `forward(x)`
+
+Aplica la función de activación en la capa de entrada y en la capa oculta de la red neuronal, retorna la salida de la capa final de la red.
+
+```python
+ x = relu(self.inp(x))  
+x = relu(self.layer(x))
+x = self.out(x) 
+return x
+```
+
+#### `get_loss(x, y)`
+
+Calcula la pérdida entre las predicciones de la red neuronal y los valores reales utilizando la función mse_loss.
+
+```python
+predictions = self.forward(x)
+return mse_loss(predictions, y)
+```
+
+#### `train(dataset, epochs=...)`
+
+Entrena el modelo usando descenso de gradiente con Adam (lr=0.001). El entrenamiento se ejecuta por varias épocas sobre el conjunto de entrenamiento. En cada época se calcula la pérdida total de cada batch en el dataset, luego, al final de iterar sobre cada batch se calcula la pérdida promedio, si esta es menor que 0.001 la iteración termina.
+
+data = DataLoader(dataset, batch_size=70, shuffle=True)
+        optimizer = optim.Adam(self.parameters(), lr=0.001)
+        epochs = 2000
+
+```python
+        
+for epoch in range(epochs):
+  total_loss = 0.0
+  for batch in data:
+    x_batch, y_batch = batch['x'], batch['label']
+    optimizer.zero_grad()
+    predictions = self(x_batch)
+    loss = self.get_loss(x_batch, y_batch)  
+    loss.backward()  
+    optimizer.step()  
+    total_loss += loss.item()
+
+  avg_loss = total_loss / len(data)  
+
+  if epoch % 200 == 0:
+    print(f"Epoch {epoch}/{epochs} - Perdida: {avg_loss:.6f}")
+
+if avg_loss <= 0.001:
+    print(f"Deteniendo en la itreación {epoch} con perdida de {avg_loss:.6f}")
+      break
+```
+
+### Evaluación del Modelo
+
+- Se calcula la pérdida total de cada batch y se mejoran los parámetros de la ecuación con el optimizador de Adam, luego de evaluar la pérdida en cada batch, se calcula la pérdida en promedio .
+- Se espera que el modelo alcance al menos una pérdida menor a 0.02.
+
+### Resultados del modelo
+
+- El modelo alcanza el valor de pérdida menor a 0.01 entre las 250 y 310 iteraciones en cada intento.
+- La pérdida promedio oscila entre 0.0007 y 0.0008 en cada intento.
 
 ## Problema 3 - Red Neuronal - Clasificación de Dígitos
+
+Este problema aborda la implementación de una red neuronal feedforward (también conocida como red multicapa o MLP) entrenada para resolver el problema de clasificación de dígitos escritos a mano, utilizando el conjunto de datos MNIST. Cada imagen en este dataset es de 28x28 píxeles, lo que se transforma en vectores de 784 dimensiones.
+
+### Objetivo del Modelo
+
+El objetivo del modelo es recibir una imagen (vector de 784 valores de tipo float) y devolver un vector de 10 dimensiones que representa los puntajes (logits) para cada clase del 0 al 9. El dígito más probable será el de mayor puntaje. Para entrenar esta red, se usa la pérdida de entropía cruzada (cross_entropy), ideal para tareas de clasificación multiclase.
+
+**Importante:** No se debe aplicar activación ReLU en la última capa, ya que los logits deben pasar directamente a la función de pérdida.
+
+### Arquitectura del Modelo
+
+El modelo está definido en la clase `DigitClassificationModel`, y tiene la siguiente arquitectura:
+
+- Capa de Entrada: 784 neuronas (una por píxel)
+- Capa Oculta 1: 150 neuronas, activación ReLU
+- Capa Oculta 2: 50 neuronas, activación ReLU
+- Capa Oculta 3: 50 neuronas, activación ReLU
+- Capa de Salida: 10 neuronas (una por clase), sin activación final
+
+```python
+self.fc1 = Linear(784, 150)
+self.fc2 = Linear(150, 50)
+self.fc3 = Linear(50, 50)
+self.fc4 = Linear(50, 10)  # logits (sin ReLU aquí)
+```
+
+### Funciones Principales
+
+#### `run(x)`
+
+Ejecuta una forward pass por la red. Aplica activaciones ReLU en todas las capas excepto la última.
+
+```python
+x = relu(self.fc1(x))
+x = relu(self.fc2(x))
+x = relu(self.fc3(x))
+logits = self.fc4(x)
+return logits
+```
+
+#### `get_loss(x, y)`
+
+Calcula la pérdida entre las predicciones (logits) y las etiquetas verdaderas y usando entropía cruzada.
+
+#### `train(dataset, epochs=...)`
+
+Entrena el modelo usando descenso de gradiente con Adam (lr=0.001). El entrenamiento se ejecuta por varias épocas sobre el conjunto de entrenamiento.
+
+### Evaluación del Modelo
+
+- Durante el entrenamiento, se calcula la precisión sobre el conjunto de validación con `dataset.get_validation_accuracy()`.
+- Se espera que el modelo alcance al menos 97% de precisión en validación, aunque se recomienda apuntar a 97.5%-98% para asegurarse de pasar el calificador automático, que usa un conjunto de prueba oculto.
+
+### Buenas Prácticas de Entrenamiento
+
+- Entrenar durante aproximadamente 5 épocas es suficiente en la mayoría de los casos.
+- Si la precisión no mejora después de algunas épocas, puedes detener el entrenamiento antes.
+- No aplicar softmax manualmente a la salida, ya que la función `cross_entropy()` se encarga internamente de eso.
+- Asegurarse de que los datos estén bien normalizados (por ejemplo, escalados entre 0 y 1).
