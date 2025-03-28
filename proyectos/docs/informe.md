@@ -2,27 +2,27 @@
 
 Este proyecto implementa un modelo de **perceptrón binario** siguiendo las especificaciones del curso de *Machine Learning* de la Universidad de California, Berkeley. La estructura del proyecto está contenida dentro del directorio:
 
-```markdown
-proyectos/proyecto1
-```
+- ```bash
+   proyectos/proyecto1
+   ```
 
 Para ejecutar los programas, se recomienda [**clonar el repositorio**](https://github.com/JosueSay/IntelligenceArtificial). Se deben instalar las dependencias necesarias ejecutando el siguiente comando:
 
-```bash
-pip install -r requirements.txt
-```
+- ```bash
+   pip install -r requirements.txt
+   ```
 
-Una vez instalado todo, se pueden ejecutar las distintas preguntas del autograder con los siguientes comandos para ejecutar cada problema que se menciona en el informe:
+Una vez instalado todo, se ejecutar el archivo del `autograder` con los siguientes comandos para ejecutar cada problema que se menciona en el informe:
 
-```bash
-python autograder.py -q q1
-python autograder.py -q q2
-python autograder.py -q q3
-```
+- ```bash
+   python autograder.py -q q1
+   python autograder.py -q q2
+   python autograder.py -q q3
+   ```
 
 Este desarrollo fue realizado conforme a las indicaciones del proyecto de *Berkeley CS188* disponible en el siguiente enlace:
 
-- [Berkeley CS188 - Project 5: Machine Learning](https://inst.eecs.berkeley.edu/~cs188/sp25/projects/proj5/#question-3-6-points-digit-classification)
+- [**Berkeley CS188 - Project 5: Machine Learning**](https://inst.eecs.berkeley.edu/~cs188/sp25/projects/proj5/#question-3-6-points-digit-classification)
 
 ## Problema 1 - Perceptrón Binario
 
@@ -121,7 +121,7 @@ self.out = Linear(150, 1)
 Aplica la función de activación en la capa de entrada y en la capa oculta de la red neuronal, retorna la salida de la capa final de la red.
 
 ```python
- x = relu(self.inp(x))  
+x = relu(self.inp(x))  
 x = relu(self.layer(x))
 x = self.out(x) 
 return x
