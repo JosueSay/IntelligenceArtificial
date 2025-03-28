@@ -1,12 +1,11 @@
 # Problema 2 - Red Neuronal: Cálculo de la función sen(x)
 
-Este problema aborda la implementación de una red neuronal feedforward (también conocida como red multicapa o MLP) queimplementa un algoritmo de regresión no lineal para calcular la función sen(x) con x .
+Este problema aborda la implementación de una red neuronal feedforward (también conocida como red multicapa o MLP) que implementa un algoritmo de regresión no lineal para calcular la función sen(x) con x entre -2π y y 2π .
 
 ## Objetivo del Modelo
 
-El objetivo del modelo es recibir un valor x entre  y devolver un vector de 10 dimensiones que representa los puntajes (logits) para cada clase del 0 al 9. El dígito más probable será el de mayor puntaje. Para entrenar esta red, se usa la pérdida de entropía cruzada (cross_entropy), ideal para tareas de clasificación multiclase.
+El objetivo del modelo es recibir un valor x entre -2π y y 2π  y devolver volver un valor y que representa el valor de x evaluado en la función seno. Para entrenar esta red, se usa el error medio cuadrado (mse_loss), ideal para modelos de regresión
 
-**Importante:** No se debe aplicar activación ReLU en la última capa, ya que los logits deben pasar directamente a la función de pérdida.
 
 ## Arquitectura del Modelo
 
@@ -85,7 +84,6 @@ if avg_loss <= 0.001:
 
 ## Cómo ejecutar este modelo
 
-### Paso 1: Crear el entorno virtual
 
 Ubícate en el directorio del proyecto y ejecuta:
 
