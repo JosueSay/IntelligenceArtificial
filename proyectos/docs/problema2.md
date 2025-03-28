@@ -73,48 +73,23 @@ if avg_loss <= 0.001:
 ```
 ## Evaluación del Modelo
 
-- Se calcula .
+- Se calcula la pérdida total de cada batch y se mejoran los parámetros de la ecuación con el optimizador de Adam, luego de evaluar la pérdida en cada batch, se calcula la pérdida en promedio .
 - Se espera que el modelo alcance al menos una pérdida menor a 0.02.
 
-## Buenas Prácticas de Entrenamiento
+## Resultados del modelo
 
-- Entrenar durante aproximadamente 5 épocas es suficiente en la mayoría de los casos.
-- Si la precisión no mejora después de algunas épocas, puedes detener el entrenamiento antes.
-- No aplicar softmax manualmente a la salida, ya que la función `cross_entropy()` se encarga internamente de eso.
-- Asegurarse de que los datos estén bien normalizados (por ejemplo, escalados entre 0 y 1).
+- El modelo alcanza el valor de pérdida menor a 0.01 entre las 250 y 310 iteraciones en cada intento.
+- La pérdida promedio oscila entre 0.0007 y 0.0008 en cada intento. 
 
 
-## Cómo ejecutar en un entorno virtual
+
+## Cómo ejecutar este modelo
 
 ### Paso 1: Crear el entorno virtual
 
 Ubícate en el directorio del proyecto y ejecuta:
 
 ```bash
-python -m venv venv
+python autograder.py -q q2
 ```
 
-Esto creará un entorno virtual llamado venv.
-
-### Paso 2: Activar el entorno virtual
-
-En bash/zsh:
-
-```bash
-source venv/bin/activate
-```
-
-
-### Paso 3: Instalar las dependencias
-
-
-```bash
-pip install -r requirements.txt
-```
-
-
-```bash
-pip install -r ../otra_carpeta/requirements.txt
-```
-
-```
