@@ -1,6 +1,6 @@
 # Problema 3
 
-- Ingresar al sitio <https://cs.stanford.edu/people/abisee/tutorial/astar.html>.  
+- Ingresar al sitio <https://cs.stanford.edu/people/abisee/tutorial/customize.html>.  
 - Realizar varios experimentos y comparaciones, variando:  
   - La posición del inicio y el objetivo
   - Agregando paredes y obstáculos
