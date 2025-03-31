@@ -1,6 +1,8 @@
-# Desarrollo de Heurísticas para Algoritmos de Búsqueda: Análisis Matemático Detallado
+# Problema 4
 
-## 1. Problema del TSP (Basado en Árbol de Expansión Mínima*
+Diseñar heurísticas para los siguientes problemas. Para cada una de ellas, indicar (de ser posible) si es una heurística admisible o no.
+
+## a. Problema del TSP - Basado en Árbol de Expansión Mínima
 
 ### Formulación Matemática Extendida
 
@@ -17,23 +19,22 @@ donde:
 ### Demostración de Admisibilidad
 
 - **Componente MST**:
-    
-    - Sea $H$ el tour óptimo restante. Si se elimina un arco de $H$, se obtiene un árbol de expansión.
-    - Por definición de MST: $MST(C_R) \leq costo(H^* - \text{un arco})$
-    - Por lo tanto: $$MST(C_R) \leq costo(H) - \min(\text{arcos de } H)$$
+
+  - Sea $H$ el tour óptimo restante. Si se elimina un arco de $H$, se obtiene un árbol de expansión.
+  - Por definición de MST: $MST(C_R) \leq costo(H^* - \text{un arco})$
+  - Por lo tanto: $$MST(C_R) \leq costo(H) - \min(\text{arcos de } H)$$
 
 - **Componentes de conexión**:
-    
-    - Necesitamos al menos un arco para conectar el último nodo visitado ($i \in C_V$) a $C_R$
-    - Necesitamos al menos un arco para regresar al inicio desde $C_R$
-    - El mínimo global $\min_{k,l \in C_R} c(k,l)$ es un límite inferior para ambos
+
+  - Necesitamos al menos un arco para conectar el último nodo visitado ($i \in C_V$) a $C_R$
+  - Necesitamos al menos un arco para regresar al inicio desde $C_R$
+  - El mínimo global $\min_{k,l \in C_R} c(k,l)$ es un límite inferior para ambos
 
 Matemáticamente, para cualquier tour completo $T$ que extienda el estado actual:
 
 $$MST(C_R) + c_{min1} + c_{min2} \leq costo(T)$$
 
-## 2. 8-Puzzle, (Basado en distancia Manhattan )
-
+## b. 8-Puzzle, (Basado en distancia Manhattan )
 
 La heurística se define como:
 
@@ -65,7 +66,7 @@ Esto se cumple porque:
 - La distancia Manhattan de una ficha cambia en $\pm 1$ por movimiento
 - Los conflictos lineales solo pueden resolverse o reducirse con movimientos que compensen el cambio en $h$
 
-## 3. Torres de Hanoi, (Basado en Análisis Recursivo)
+## c. Torres de Hanoi, (Basado en Análisis Recursivo)
 
 ### Formulación Recursiva
 
