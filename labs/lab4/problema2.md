@@ -23,6 +23,10 @@
 
     ![Configuración 4](./images/configuracion8.png)
 
+## Reto: ¿Puedes colocar las paredes de tal forma que Greedy Search recorra un camino más largo que BFS?
+
+En la Configuración 1 se observa que Greedy sigue un camino más largo que BFS: Greedy realiza 31 pasos, mientras que BFS encuentra una ruta más eficiente con solo 25 pasos dentro del grid.
+
 ## a. ¿Es el algoritmo Greedy óptimo (es decir, siempre regresa el camino más corto)? ¿Por qué?
 
 No, Greedy Search no es óptimo porque trabaja bajo la suposición de que la heurística es completamente correcta. Si ese fuera el caso, puede devolver una solución rápida, ya que la heurística actúa como una brújula. Sin embargo, en la práctica no siempre retorna el camino óptimo. Esto ocurre, por ejemplo, en presencia de obstáculos, donde Greedy puede comportarse de forma ineficiente, repitiendo o retrocediendo pasos. Esto sucede porque se guía exclusivamente por minimizar la heurística, y si en algún punto el valor minimizado ya no permite avanzar, debe retroceder y reiniciar la búsqueda, lo que incrementa los pasos hacia el objetivo. En resumen, no observa el panorama completo, solo la dirección aparente más prometedora.

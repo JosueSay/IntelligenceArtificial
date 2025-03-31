@@ -149,6 +149,10 @@ Sí, en este caso ambos hallan el mismo camino. Esto se debe a que BFS encuentra
 
     ![Configuración 4]()
 
+### Reto: ¿Puedes colocar las paredes de tal forma que Greedy Search recorra un camino más largo que BFS?
+
+En la Configuración 1 se observa que Greedy sigue un camino más largo que BFS: Greedy realiza 31 pasos, mientras que BFS encuentra una ruta más eficiente con solo 25 pasos dentro del grid.
+
 ### a. ¿Se puede modificar el mapa de forma que A* termine mucho más rápido que Dijkstra?
 
 ### b. ¿Dijkstra y A*ponderado (weighted A*) siempre encuentran caminos diferentes?  
