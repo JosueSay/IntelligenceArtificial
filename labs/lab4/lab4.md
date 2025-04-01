@@ -132,7 +132,7 @@ En general Dijkstra y A* siempre terminan en tiempos similares, esto posiblement
 
 ### ¿Dijkstra y weighted A∗ siempre encuentran diferentes caminos?
 
-No, casi siempre encuentran el mismo camino, esto posiblemente se deba al tamaño del espacio en donde se debe buscar pues al ser limitado, la ruta siempre será similar. 
+No, casi siempre encuentran el mismo camino, esto posiblemente se deba al tamaño del espacio en donde se debe buscar pues al ser limitado, la ruta siempre será similar.
 
 ### ¿Es Dijkstra o weighted A∗ el más rápido? ¿Siempre o sólo en ocasiones?
 
@@ -214,7 +214,15 @@ Para $n$ discos, se define la heurística como:
 
 $$h_{TH}(s) = \sum_{i=1}^n 2^{i-1} \cdot \delta_i(s)$$
 
-donde $$\delta_i(s) = \begin{cases} 0 & \text{si disco } i \text{ está en torre destino con discos menores encima} \ 1 & \text{en otro caso} \end{cases}$$
+donde:
+
+$$
+\delta_i(s) =
+\begin{cases}
+0 & \text{si el disco } i \text{ está en la torre destino con discos menores encima} \\
+1 & \text{en otro caso}
+\end{cases}
+$$
 
 #### Demostración por Inducción
 
