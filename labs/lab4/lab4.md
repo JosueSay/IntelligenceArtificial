@@ -126,38 +126,17 @@ Sí, en este caso ambos hallan el mismo camino. Esto se debe a que BFS encuentra
 
 ## Problema 3
 
-- Ingresar al sitio <https://cs.stanford.edu/people/abisee/tutorial/customize.html>.  
-- Realizar varios experimentos y comparaciones, variando:  
-  - La posición del inicio y el objetivo
-  - Agregando paredes y obstáculos
+### ¿Se puede alterar el mapa de forma que A∗ termine mucho más rápido que Dijkstra?
 
-- Ejemplos hechos:
+En general Dijkstra y A* siempre terminan en tiempos similares, esto posiblemente se deba a que el espacio es pequeño y en espacios pequeños dijkstra puede tener un buen rendimiento ya que no debe buscar muchas alternativas.
 
-  - **Configuración 1:**
+### ¿Dijkstra y weighted A∗ siempre encuentran diferentes caminos?
 
-    ![Configuración 1]()
+No, casi siempre encuentran el mismo camino, esto posiblemente se deba al tamaño del espacio en donde se debe buscar pues al ser limitado, la ruta siempre será similar. 
 
-  - **Configuración 2:**  
+### ¿Es Dijkstra o weighted A∗ el más rápido? ¿Siempre o sólo en ocasiones?
 
-    ![Configuración 2]()
-
-  - **Configuración 3:**  
-
-    ![Configuración 3]()
-
-  - **Configuración 4:**  
-
-    ![Configuración 4]()
-
-### Reto: ¿Puedes colocar las paredes de tal forma que Greedy Search recorra un camino más largo que BFS?
-
-En la Configuración 1 se observa que Greedy sigue un camino más largo que BFS: Greedy realiza 31 pasos, mientras que BFS encuentra una ruta más eficiente con solo 25 pasos dentro del grid.
-
-### a. ¿Se puede modificar el mapa de forma que A* termine mucho más rápido que Dijkstra?
-
-### b. ¿Dijkstra y A*ponderado (weighted A*) siempre encuentran caminos diferentes?  
-
-### c. ¿Cuál es más rápido, Dijkstra o A* ponderado? ¿Siempre o solo en algunas ocasiones?
+En el caso de esta laberinto, A* es siempre más rápido, este puede deberse a que la función de heurística hace que recorre menos caminos y puede hallar el correcto de forma más rápida.
 
 ## Problema 4
 
