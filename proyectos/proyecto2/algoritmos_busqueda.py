@@ -1,5 +1,3 @@
-import numpy as np
-from queue import Queue, PriorityQueue
 
 # Maze va a ser el laberinto, lo voy a definir posteriormente en Problema3.py
 
@@ -123,3 +121,50 @@ def uniform_cost_search(maze, start, end):
 def heuristic(a, b):
     # Distancia Manhattan
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+def a_star(maze, start, end):
+    rows, cols = maze.shape
+    open_set = [(0, start)]  # (f_score, position)
+    closed_set = set()
+    g_score = {start: 0}
+    f_score = {start: heuristic(start, end)}
+    parent = {start: None}
+    nodes_explored = 0
+    
+    while open_set:
+        _, current = heapq.heappop(open_set)
+        
+        if current in closed_set:
+            continue
+            
+        closed_set.add(current)
+        nodes_explored += 1
+        
+        if current == end:
+            break
+            
+        # Explorar vecinos
+        for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            new_r, new_c = current[0] + dr, current[1] + dc
+            
+            if (0 <= new_r < rows and 0 <= new_c < cols and 
+                maze[new_r, new_c] == 0 and (new_r, new_c) not in closed_set):
+                neighbor = (new_r, new_c)
+                tentative_g = g_score[current] + 1
+                
+                if neighbor not in g_score or tentative_g < g_score[neighbor]:
+                    parent[neighbor] = current
+                    g_score[neighbor] = tentative_g
+                    f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, end)
+                    heapq.heappush(open_set, (f_score[neighbor], neighbor))
+    
+    path = []
+    current = end
+    
+    if end in parent:
+        while current:
+            path.append(current)
+            current = parent[current]
+        path.reverse()
+        
+    return path, nodes_explored
