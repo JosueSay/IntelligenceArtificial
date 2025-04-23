@@ -1,1 +1,1 @@
-# IntelligenceArtificial
+# Proyecto 2 
