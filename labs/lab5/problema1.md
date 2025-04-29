@@ -42,9 +42,9 @@ Verificamos dos restricciones:
 - $(X_2, X_3) = (a, ?)$ debe estar en $C(X_2, X_3) \Rightarrow (a, \gamma)$
 
 Pero no hay **intersección** entre los valores válidos:  
-$\beta \not= \gamma$ → **falla**
+$\beta \not= \gamma$ -> **falla**
 
-Volvemos a $X_2$ → no hay otro valor que cumpla $(1, x)$ en $C(X_1, X_2)$  
+Volvemos a $X_2$ -> no hay otro valor que cumpla $(1, x)$ en $C(X_1, X_2)$  
 -> **backtrack a $X_1$**
 
 **Probar $X_1 = 2$**
@@ -55,20 +55,20 @@ $C(X_1, X_2)$: $(2,b)$
 
 **Verificar $X_3$**
 
-- $C(X_1, X_3):$ $(2, ?)$ → **no está en ninguna tupla** → **falla**  
+- $C(X_1, X_3):$ $(2, ?)$ -> **no está en ninguna tupla** -> **falla**  
 -> **backtrack**
 
 **Probar $X_1 = 3$**
 
-$C(X_1, X_2): (3,a), (3,b)$ → probamos **$X_2 = a$**
+$C(X_1, X_2): (3,a), (3,b)$ -> probamos **$X_2 = a$**
 
 $C(X_1, X_3): (3, \beta)$  
-$C(X_2, X_3): (a, \gamma)$ → no hay intersección → **falla**
+$C(X_2, X_3): (a, \gamma)$ -> no hay intersección -> **falla**
 
 Probar **$X_2 = b$**
 
 $C(X_2, X_3):$ $(b, \beta), (b, \alpha)$  
-Intersección con $(3, \beta)$ ⇒ $X_3 = \beta$ válido
+Intersección con $(3, \beta)$ => $X_3 = \beta$ válido
 
 ### Solución encontrada
 
