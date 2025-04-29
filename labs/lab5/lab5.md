@@ -152,6 +152,10 @@ $$\max(5, 35) = 35$$
 
 **La acción sí cambia si el valor terminal 8 cambia a 80.**
 
+## Problema 3
+
+
+
 ## Problema 4
 
 ### Algoritmo Minimax
