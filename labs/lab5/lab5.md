@@ -176,6 +176,11 @@ Usando el algoritmo minimax, concluimos que la mejor acción del jugador max es 
 
 Seteamos $$\alpha$$ como $$-\inf$$ y $$\beta$$ como $$\inf$$
 
+Ahora, exploraremos el extrremo izquierdo del árbol. Para el nodo con valor 5, alfa permanace como $$-\inf$$ y como beta es mayor que 5, entonces ahora beta = 5.Luego revisamos el siguiente nodo terminal (2), como es meenor que nuestro beta (5), ahora nuestro nuevo beta = 2. Finalmente revisamos el nodo terminal (3), como es mayor que nuestro beta lo descartamos y el valor de ese nodo será 2. Alpha se mantiene como $$-\inf$$ y beta = 2
+
+Ahora vamos con la parte central del nodo. Ahora beta es igual que 2, analizando ls condiciones vemos que el único nodo terminal en esta parte es el 1, por lo que ahora nuestro beta = 1. 
+
+Finalmente, en extreo derecho, vemos que el valor menor es 0, actualizamos beta y ahora beta = 0. Ahora debemos tomar la mejor decisión el el nodo raíz, los valores de los nodos del nivel 2 son: {2, 1, 0} y beta = 0 y alpha = $$-inf$$ , como el nodo raíz es un max, ahora hay que actualizar el valor de beta. Vemos que el major valor es 2 y además los otros dos valors cumplen la condición $$\alpha >= \beta$$, por lo tanto descartamos el camino central y el camino derecho del árbol y determinamos que la mejor decisión es el camino más a la izquierda del árbol. 
 
 
 
