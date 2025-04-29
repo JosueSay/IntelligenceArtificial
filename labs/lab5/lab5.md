@@ -174,6 +174,7 @@ Usando el algoritmo minimax, concluimos que la mejor acción del jugador max es 
 
 ### Poda alpha beta
 
+Seteamos $$\alpha$$ como $$-\inf$$ y $$\beta$$ como $$\inf$$
 
 
 
