@@ -123,14 +123,12 @@ Los triángulos que apuntan hacia arriba son nodos de **maximización**, los tri
 - Nodo raíz
   $$\max(5, -1) = 5$$
 
-#### Diagrama\newline
-
-![Diagrama Problema 2 Parte 1](./images/p2_1.png){height=180px}
-
 #### Resultado
 
 - **Valor expectiminimax de la raíz**: **5**  
 - **Acción elegida**: **ir al subárbol izquierdo**
+
+![Diagrama Problema 2 Parte 1](./images/p2_1.png){height=180px}
 
 ### ¿Cambiaría el jugador que maximiza de acción si el pago 8 cambiara a 80?
 
@@ -144,8 +142,6 @@ Ahora el nodo raíz decide entre:
 - Subárbol derecho: 35  
 
 $$\max(5, 35) = 35$$
-
-#### Diagrama\newline
 
 ![Diagrama Problema 2 Parte 2](./images/p2_2.png){height=180px}
 
