@@ -154,6 +154,28 @@ $$\max(5, 35) = 35$$
 
 ## Problema 3
 
+Considere el siguiente árbol que representa un juego de suma cero, donde los triángulos que apuntan hacia arriba son nodos
+de maximizaci´on, los triángulos que apuntan hacia abajo son nodos de minimización y los cuadrados son nodos terminales
+con el valor correspondiente de la función de utilidad para el jugador que maximiza
+![Arbol](./images/diagrma.png).
+
+### Algoritmo minimax
+
+Empezamos desde abajo en el nodo izquierdo (donde se ubican los nodos con valores {5,2,3}),  vemos que el nivel de arriba tiene nodos que minimizan, por lo que debemos escoger el valor menor, en este caso es 2. 
+
+Luego vamos a la parte central {1,2,3}, ya sabemos que el nivel de arriba minimiza, por lo que escogemos 1. 
+
+Luego, en el extremo derecho observamos que el valor menor es 0, por lo tanto lo escogemos. 
+
+Ahora, con las elecciones realizadas, vemos que el el nivel 2 quedan estos valores: {2, 1, 0}. El nodo raíz tiene el objetivo de maximizar, por lo tanto el mejor camino es el que tiene al número 2, el que está más a la izquierda. 
+
+Usando el algoritmo minimax, concluimos que la mejor acción del jugador max es escoger el nodo que está más a la izquierda. 
+
+
+### Poda alpha beta
+
+
+
 
 
 ## Problema 4
