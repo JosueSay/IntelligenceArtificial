@@ -1,73 +1,41 @@
-import random
-
 class TicTacToe:
-  def __init__(self, user_player='X'):
-    self.board = [[' ' for _ in range(3)] for _ in range(3)]
-    self.players = ['X', 'O']
+    def __init__(self):
+        self.board = [' '] * 9
+        self.currentPlayer = 'X'
     
-    if user_player not in self.players:
-      raise ValueError("Invalid player. Choose 'X' or 'O'.")
-    
-    self.user_player = user_player
-    self.computer_player = self.otherPlayer(user_player)
-    self.current_player = random.choice(self.players)
-    
-    print(f"You are '{self.user_player}'.")
-    print(f"Player {self.current_player} starts the game!")
-  
-  def otherPlayer(self, player):
-    return self.players[1] if player == self.players[0] else self.players[0]
-  
-  def nextPlayer(self):
-    return self.otherPlayer(self.current_player)
-    
-  def printBoard(self):
-    for row in self.board:
-      print('|'.join(row))
-      print('-' * 5)
-      
-  def makeMove(self, row, col):
-    if self.board[row][col] == ' ':
-      self.board[row][col] = self.current_player
-      self.nextPlayer()
-      return True
-    return False
-  
-  def veriffyWinner(self):
-    # Verifica filas
-    for row in self.board:
-      if row[0] != ' ' and row[0] == row[1] == row[2]:
-        return 1 if row[0] == self.user_player else -1
+    def clone(self):
+        clone = TicTacToe()
+        clone.board = self.board[:]
+        clone.currentPlayer = self.currentPlayer
+        return clone
 
-    # Verifica columnas
-    for col in range(3):
-      if self.board[0][col] != ' ' and self.board[0][col] == self.board[1][col] == self.board[2][col]:
-        return 1 if self.board[0][col] == self.user_player else -1
+    # devolverá una lista de índices disponibles para jugar
+    def availableMoves(self):
+        return [i for i, v in enumerate(self.board) if v == ' ']
 
-    # Verifica diagonales
-    if self.board[0][0] != ' ' and self.board[0][0] == self.board[1][1] == self.board[2][2]:
-      return 1 if self.board[0][0] == self.user_player else -1
+    def makeMove(self, idx):
+        if self.board[idx] != ' ':
+            return False
+        self.board[idx] = self.currentPlayer
+        self.currentPlayer = 'O' if self.currentPlayer == 'X' else 'X'
+        return True
 
-    if self.board[0][2] != ' ' and self.board[0][2] == self.board[1][1] == self.board[2][0]:
-      return 1 if self.board[0][2] == self.user_player else -1
+    # verifica si el juego ha terminado, ya sea por victoria o empate 'D'
+    def isTerminal(self):
+        return self.getWinner() is not None or all(v != ' ' for v in self.board)
 
-    # Si no hay ganador, pero el tablero está lleno, es empate
-    if all(cell != ' ' for row in self.board for cell in row):
-      return 0
+    def getWinner(self):
+        wins = [(0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6)]
+        for i, j, k in wins:
+            if self.board[i] == self.board[j] == self.board[k] != ' ':
+                return self.board[i]
+        return None if ' ' in self.board else 'D'
 
-    # Si no hay ganador y el juego no ha terminado, retorna None
-    return None
-  
-  def printWinner(self):
-    winner = self.veriffyWinner()
-    if winner is None:
-      print("Game is still ongoing.")
-    elif winner == 0:
-      print("It's a draw!")
-    elif winner == 1:
-      print("You win!")
-    elif winner == -1:
-      print("Computer wins!")
-      
-# game = TicTacToe(user_player='X')
-# game.printBoard()
+    def score(self):
+        winner = self.getWinner()
+        if winner == 'X':
+            return 1
+        elif winner == 'O':
+            return -1
+        else:
+            return 0
