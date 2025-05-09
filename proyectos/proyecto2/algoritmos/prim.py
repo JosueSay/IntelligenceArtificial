@@ -38,9 +38,9 @@ def generateMazePrim(rows=50, cols=50, seed=None):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                return maze
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return
+                return maze
 
         r, c = random.choice(frontier)
         neighbors = []
@@ -67,6 +67,7 @@ def generateMazePrim(rows=50, cols=50, seed=None):
 
     print("Laberinto generado con éxito usando Prim. Pulsa ESC para salir o volver al menú.")
     waitForExit()
+    return maze
 
 
 def drawMaze(screen, maze, cellSize, offsetX, offsetY):
@@ -91,4 +92,3 @@ def waitForExit():
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
-

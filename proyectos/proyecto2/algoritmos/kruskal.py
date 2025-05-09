@@ -2,6 +2,7 @@ import random
 import pygame
 import time
 
+
 class UnionFind:
     def __init__(self, size):
         self.parent = list(range(size))
@@ -56,9 +57,9 @@ def generateMazeKruskal(rows=50, cols=50, seed=None):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                return maze
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return
+                return maze
 
         idx1 = r1 * cols + c1
         idx2 = r2 * cols + c2
@@ -73,6 +74,7 @@ def generateMazeKruskal(rows=50, cols=50, seed=None):
 
     print("Laberinto generado con éxito. Pulsa ESC para salir o volver al menú.")
     waitForExit()
+    return maze
 
 
 def drawMaze(screen, maze, cellSize, offsetX, offsetY):
