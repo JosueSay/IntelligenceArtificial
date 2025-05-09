@@ -1,15 +1,18 @@
 import random
 import pygame
 import time
+from maze import Maze
 
 # ================== CONFIGURACIÓN ==================
 DEFAULT_ROWS = 50
 DEFAULT_COLS = 50
-DEFAULT_SEED = None
-ANIMATION_DELAY = 0.005  # segundos
+DEFAULT_SEED_STRUCTURE = None  # Semilla para la generación de la estructura
+DEFAULT_SEED_WEIGHTS = None    # Semilla para la asignación de pesos
+ANIMATION_DELAY = 0.005        # segundos
 WINDOW_SIZE = (1280, 720)
 BACKGROUND_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
+USE_WEIGHTED = False            # Indica si se usará un laberinto ponderado
 # ===================================================
 
 class UnionFind:
@@ -36,71 +39,110 @@ class UnionFind:
             return True
         return False
 
-def generateMazeKruskal(rows=DEFAULT_ROWS, cols=DEFAULT_COLS, seed=DEFAULT_SEED):
-    random.seed(seed)
-    pygame.init()
+class KruskalMazeGenerator:
+    def __init__(self, rows=DEFAULT_ROWS, cols=DEFAULT_COLS, 
+                 seed_structure=DEFAULT_SEED_STRUCTURE, seed_weights=DEFAULT_SEED_WEIGHTS, 
+                 weighted=USE_WEIGHTED):
+        self.rows = rows
+        self.cols = cols
+        self.seed_structure = seed_structure
+        self.seed_weights = seed_weights
+        self.weighted = weighted
+        self.maze = Maze()
 
-    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE)
-    pygame.display.set_caption("Laberinto con Kruskal")
+    def displayConfiguration(self):
+        print("\n=== Configuración Utilizada ===")
+        print(f"Tipo de Laberinto: {'Ponderado' if self.weighted else 'No Ponderado'}")
+        print("Algoritmo de Generación: Kruskal")
+        print(f"Semilla de Estructura: {self.seed_structure}")
+        print(f"Semilla de Pesos: {self.seed_weights if self.weighted else 'N/A'}")
+        print("===============================\n")
 
-    def drawAndResize():
-        screenWidth, screenHeight = screen.get_size()
-        cellSize = min(screenWidth // (2 * cols + 1), screenHeight // (2 * rows + 1))
-        mazeWidth = cellSize * (2 * cols + 1)
-        mazeHeight = cellSize * (2 * rows + 1)
-        offsetX = (screenWidth - mazeWidth) // 2
-        offsetY = (screenHeight - mazeHeight) // 2
-        return cellSize, offsetX, offsetY
+    def generate(self):
+        self.displayConfiguration()
+        random.seed(self.seed_structure)
+        pygame.init()
 
-    cellSize, offsetX, offsetY = drawAndResize()
-    maze = [[1 for _ in range(2 * cols + 1)] for _ in range(2 * rows + 1)]
-    uf = UnionFind(rows * cols)
+        screen = pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE)
+        pygame.display.set_caption("Laberinto con Kruskal")
 
-    edges = [((r, c), (r, c + 1)) for r in range(rows) for c in range(cols - 1)] + \
-            [((r, c), (r + 1, c)) for r in range(rows - 1) for c in range(cols)]
-    random.shuffle(edges)
+        def drawAndResize():
+            screenWidth, screenHeight = screen.get_size()
+            cellSize = min(screenWidth // (2 * self.cols + 1), screenHeight // (2 * self.rows + 1))
+            mazeWidth = cellSize * (2 * self.cols + 1)
+            mazeHeight = cellSize * (2 * self.rows + 1)
+            offsetX = (screenWidth - mazeWidth) // 2
+            offsetY = (screenHeight - mazeHeight) // 2
+            return cellSize, offsetX, offsetY
 
-    for (r1, c1), (r2, c2) in edges:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return maze
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return maze
+        cellSize, offsetX, offsetY = drawAndResize()
+        grid = [[1 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+        uf = UnionFind(self.rows * self.cols)
 
-        idx1 = r1 * cols + c1
-        idx2 = r2 * cols + c2
-        if uf.union(idx1, idx2):
-            maze[2 * r1 + 1][2 * c1 + 1] = 0
-            maze[2 * r2 + 1][2 * c2 + 1] = 0
-            maze[r1 + r2 + 1][c1 + c2 + 1] = 0
+        edges = [((r, c), (r, c + 1)) for r in range(self.rows) for c in range(self.cols - 1)] + \
+                [((r, c), (r + 1, c)) for r in range(self.rows - 1) for c in range(self.cols)]
 
-            cellSize, offsetX, offsetY = drawAndResize()
-            drawMaze(screen, maze, cellSize, offsetX, offsetY)
-            time.sleep(ANIMATION_DELAY)
+        if self.weighted:
+            random.seed(self.seed_weights)
+            edges_with_weights = [(random.randint(1, 10), edge) for edge in edges]
+            edges_with_weights.sort(key=lambda x: x[0])
+            edges = [edge for _, edge in edges_with_weights]
+        else:
+            random.shuffle(edges)
 
-    print("Laberinto generado con éxito. Pulsa ESC para salir o volver al menú.")
-    waitForExit()
-    return maze
+        for (r1, c1), (r2, c2) in edges:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    self.maze.setGrid(grid)
+                    return self.maze
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.maze.setGrid(grid)
+                    return self.maze
 
-def drawMaze(screen, maze, cellSize, offsetX, offsetY):
-    screen.fill(BACKGROUND_COLOR)
-    for r, row in enumerate(maze):
-        for c, val in enumerate(row):
-            color = WALL_COLOR if val == 1 else BACKGROUND_COLOR
-            pygame.draw.rect(
-                screen,
-                color,
-                (offsetX + c * cellSize, offsetY + r * cellSize, cellSize, cellSize)
-            )
-    pygame.display.update()
+            idx1 = r1 * self.cols + c1
+            idx2 = r2 * self.cols + c2
+            if uf.union(idx1, idx2):
+                grid[2 * r1 + 1][2 * c1 + 1] = 0
+                grid[2 * r2 + 1][2 * c2 + 1] = 0
+                grid[r1 + r2 + 1][c1 + c2 + 1] = 0
 
-def waitForExit():
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                running = False
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                running = False
+                cellSize, offsetX, offsetY = drawAndResize()
+                self.drawMaze(screen, grid, cellSize, offsetX, offsetY)
+                time.sleep(ANIMATION_DELAY)
+
+        print("Laberinto generado con éxito usando Kruskal. Pulsa ESC para salir o volver al menú.")
+        self.waitForExit()
+
+        self.maze.setGrid(grid)
+        if self.weighted:
+            self.assignWeights()
+
+        return self.maze
+
+    def assignWeights(self):
+        random.seed(self.seed_weights)
+        weights = [[random.randint(1, 10) if cell == 0 else 0 for cell in row] for row in self.maze.grid]
+        self.maze.setWeights(weights)
+
+    def drawMaze(self, screen, grid, cellSize, offsetX, offsetY):
+        screen.fill(BACKGROUND_COLOR)
+        for r, row in enumerate(grid):
+            for c, val in enumerate(row):
+                color = WALL_COLOR if val == 1 else BACKGROUND_COLOR
+                pygame.draw.rect(
+                    screen,
+                    color,
+                    (offsetX + c * cellSize, offsetY + r * cellSize, cellSize, cellSize)
+                )
+        pygame.display.update()
+
+    def waitForExit(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    running = False
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    running = False
