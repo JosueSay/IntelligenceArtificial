@@ -12,6 +12,7 @@ ANIMATION_DELAY = 0.005        # segundos
 WINDOW_SIZE = (1280, 720)
 BACKGROUND_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
+FRONTIER_COLOR = (255, 0, 0)    # Color para las celdas en la frontera
 USE_WEIGHTED = False            # Indica si se usará un laberinto ponderado
 # ===================================================
 
@@ -33,7 +34,7 @@ class PrimMazeGenerator:
         print(f"Semilla de Estructura: {self.seed_structure}")
         print(f"Semilla de Pesos: {self.seed_weights if self.weighted else 'N/A'}")
         print("===============================\n")
-        
+
     def generate(self):
         self.displayConfiguration()
         random.seed(self.seed_structure)
@@ -102,7 +103,7 @@ class PrimMazeGenerator:
             frontier.remove((r, c))
 
             cellSize, offsetX, offsetY = drawAndResize()
-            self.drawMaze(screen, grid, cellSize, offsetX, offsetY)
+            self.drawMaze(screen, grid, cellSize, offsetX, offsetY, frontier, cellSize)
             time.sleep(ANIMATION_DELAY)
 
         print("Laberinto generado con éxito usando Prim. Pulsa ESC para salir o volver al menú.")
@@ -119,7 +120,7 @@ class PrimMazeGenerator:
         weights = [[random.randint(1, 10) if cell == 0 else 0 for cell in row] for row in self.maze.grid]
         self.maze.setWeights(weights)
 
-    def drawMaze(self, screen, grid, cellSize, offsetX, offsetY):
+    def drawMaze(self, screen, grid, cellSize, offsetX, offsetY, frontier=None, frontierSize=0):
         screen.fill(BACKGROUND_COLOR)
         for r, row in enumerate(grid):
             for c, val in enumerate(row):
@@ -128,6 +129,14 @@ class PrimMazeGenerator:
                     screen,
                     color,
                     (offsetX + c * cellSize, offsetY + r * cellSize, cellSize, cellSize)
+                )
+        # Dibujar frontera en color especial
+        if frontier:
+            for fr, fc in frontier:
+                pygame.draw.rect(
+                    screen,
+                    FRONTIER_COLOR,
+                    (offsetX + (2 * fc + 1) * cellSize, offsetY + (2 * fr + 1) * cellSize, cellSize, cellSize)
                 )
         pygame.display.update()
 
