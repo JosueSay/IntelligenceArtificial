@@ -8,6 +8,10 @@ WINDOW_SIZE = (1280, 720)
 FONT_SIZE = 60
 DEFAULT_SEED_STRUCTURE = 1234
 DEFAULT_SEED_WEIGHTS = 56789
+BACKGROUND_COLOR = (0, 0, 0)
+TEXT_COLOR = (255, 255, 255)
+DEFAULT_ROWS = 50
+DEFAULT_COLS = 50
 # ===================================================
 
 class LaberintoApp:
@@ -26,7 +30,7 @@ class LaberintoApp:
     def mainMenu(self):
         selecting = True
         while selecting:
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(BACKGROUND_COLOR)
             options = [
                 "1. Laberinto Ponderado",
                 "2. Laberinto No Ponderado",
@@ -50,7 +54,7 @@ class LaberintoApp:
     def algorithmSelectionMenu(self):
         selecting = True
         while selecting:
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(BACKGROUND_COLOR)
             options = [
                 "1. Kruskal",
                 "2. Prim",
@@ -95,7 +99,7 @@ class LaberintoApp:
     def postGenerationMenu(self, laberinto):
         selecting = True
         while selecting:
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(BACKGROUND_COLOR)
             options = [
                 "1. Generar nuevo laberinto",
                 "2. Aplicar algoritmo de búsqueda",
@@ -119,7 +123,7 @@ class LaberintoApp:
     def searchAlgorithmMenu(self):
         selecting = True
         while selecting:
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(BACKGROUND_COLOR)
             options = [
                 "1. BFS",
                 "2. DFS",
@@ -143,8 +147,8 @@ class LaberintoApp:
                         selecting = False
 
     def promptDimensionsUI(self):
-        self.screen.fill((0, 0, 0))
-        text = self.font.render("Escoge dimensiones en la consola...", True, (255, 255, 255))
+        self.screen.fill(BACKGROUND_COLOR)
+        text = self.font.render("Escoge dimensiones en la consola...", True, TEXT_COLOR)
         self.screen.blit(text, (100, 300))
         pygame.display.update()
 
@@ -155,7 +159,7 @@ class LaberintoApp:
         choice = input("Selecciona una opción: ")
 
         if choice == "1":
-            return 50, 50
+            return DEFAULT_ROWS, DEFAULT_COLS
         elif choice == "2":
             try:
                 rows = int(input("Filas: "))
@@ -170,7 +174,7 @@ class LaberintoApp:
 
     def renderOptions(self, options):
         for idx, text in enumerate(options):
-            option_text = self.font.render(text, True, (255, 255, 255))
+            option_text = self.font.render(text, True, TEXT_COLOR)
             self.screen.blit(option_text, (50, 100 + idx * 80))
         pygame.display.update()
 
