@@ -2,11 +2,21 @@ import random
 import pygame
 import time
 
-def generateMazePrim(rows=50, cols=50, seed=None):
+# ================== CONFIGURACIÓN ==================
+DEFAULT_ROWS = 50
+DEFAULT_COLS = 50
+DEFAULT_SEED = None
+ANIMATION_DELAY = 0.005  # segundos
+WINDOW_SIZE = (1280, 720)
+BACKGROUND_COLOR = (255, 255, 255)
+WALL_COLOR = (0, 0, 0)
+# ===================================================
+
+def generateMazePrim(rows=DEFAULT_ROWS, cols=DEFAULT_COLS, seed=DEFAULT_SEED):
     random.seed(seed)
     pygame.init()
 
-    screen = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE)
     pygame.display.set_caption("Laberinto con Prim")
 
     def drawAndResize():
@@ -63,7 +73,7 @@ def generateMazePrim(rows=50, cols=50, seed=None):
 
         cellSize, offsetX, offsetY = drawAndResize()
         drawMaze(screen, maze, cellSize, offsetX, offsetY)
-        time.sleep(0.005)
+        time.sleep(ANIMATION_DELAY)
 
     print("Laberinto generado con éxito usando Prim. Pulsa ESC para salir o volver al menú.")
     waitForExit()
@@ -71,10 +81,10 @@ def generateMazePrim(rows=50, cols=50, seed=None):
 
 
 def drawMaze(screen, maze, cellSize, offsetX, offsetY):
-    screen.fill((255, 255, 255))
+    screen.fill(BACKGROUND_COLOR)
     for r, row in enumerate(maze):
         for c, val in enumerate(row):
-            color = (0, 0, 0) if val == 1 else (255, 255, 255)
+            color = WALL_COLOR if val == 1 else BACKGROUND_COLOR
             pygame.draw.rect(
                 screen,
                 color,
