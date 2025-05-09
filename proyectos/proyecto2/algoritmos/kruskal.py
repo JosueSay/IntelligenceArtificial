@@ -6,13 +6,13 @@ from maze import Maze
 # ================== CONFIGURACIÓN ==================
 DEFAULT_ROWS = 50
 DEFAULT_COLS = 50
-DEFAULT_SEED_STRUCTURE = None  # Semilla para la generación de la estructura
-DEFAULT_SEED_WEIGHTS = None    # Semilla para la asignación de pesos
+DEFAULT_SEED_STRUCTURE = None  # semilla para la generación de la estructura
+DEFAULT_SEED_WEIGHTS = None    # semilla para la asignación de pesos
 ANIMATION_DELAY = 0.005        # segundos
 WINDOW_SIZE = (1280, 720)
 BACKGROUND_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
-USE_WEIGHTED = False            # Indica si se usará un laberinto ponderado
+USE_WEIGHTED = False            # indica si se usará un laberinto ponderado
 # ===================================================
 
 class UnionFind:
@@ -77,27 +77,31 @@ class KruskalMazeGenerator:
 
         cellSize, offsetX, offsetY = drawAndResize()
         grid = [[1 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
-        uf = UnionFind(self.rows * self.cols)
+        weights_grid = [[0 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+        uf = UnionFind(self.rows * self.cols) # inicializar parent-rank
 
-        edges = [((r, c), (r, c + 1)) for r in range(self.rows) for c in range(self.cols - 1)] + \
-                [((r, c), (r + 1, c)) for r in range(self.rows - 1) for c in range(self.cols)]
+        # grafo (u,v)
+        edges = [((r, c), (r, c + 1)) for r in range(self.rows) for c in range(self.cols - 1)] + [((r, c), (r + 1, c)) for r in range(self.rows - 1) for c in range(self.cols)]
 
-        if self.weighted:
+        if self.weighted: # tripleta (w, u, v) = (w, arista)
             random.seed(self.seed_weights)
             edges_with_weights = [(random.randint(1, 10), edge) for edge in edges]
             edges_with_weights.sort(key=lambda x: x[0])
-            edges = [edge for _, edge in edges_with_weights]
         else:
             random.shuffle(edges)
+            edges_with_weights = [(1, edge) for edge in edges]
 
-        for (r1, c1), (r2, c2) in edges:
+
+        for weight, (r1, c1), (r2, c2) in [(w, *e) for w, e in edges_with_weights]:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     self.maze.setGrid(grid)
+                    self.maze.setWeights(weights_grid)
                     return self.maze
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.maze.setGrid(grid)
+                    self.maze.setWeights(weights_grid)
                     return self.maze
 
             idx1 = r1 * self.cols + c1
@@ -107,6 +111,11 @@ class KruskalMazeGenerator:
                 grid[2 * r2 + 1][2 * c2 + 1] = 0
                 grid[r1 + r2 + 1][c1 + c2 + 1] = 0
 
+                # Asignar peso al camino generado
+                weights_grid[2 * r1 + 1][2 * c1 + 1] = weight
+                weights_grid[2 * r2 + 1][2 * c2 + 1] = weight
+                weights_grid[r1 + r2 + 1][c1 + c2 + 1] = weight
+
                 cellSize, offsetX, offsetY = drawAndResize()
                 self.drawMaze(screen, grid, cellSize, offsetX, offsetY)
                 time.sleep(ANIMATION_DELAY)
@@ -115,15 +124,9 @@ class KruskalMazeGenerator:
         self.waitForExit()
 
         self.maze.setGrid(grid)
-        if self.weighted:
-            self.assignWeights()
+        self.maze.setWeights(weights_grid)
 
         return self.maze
-
-    def assignWeights(self):
-        random.seed(self.seed_weights)
-        weights = [[random.randint(1, 10) if cell == 0 else 0 for cell in row] for row in self.maze.grid]
-        self.maze.setWeights(weights)
 
     def drawMaze(self, screen, grid, cellSize, offsetX, offsetY):
         screen.fill(BACKGROUND_COLOR)

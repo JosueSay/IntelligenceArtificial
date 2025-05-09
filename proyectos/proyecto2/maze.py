@@ -5,8 +5,8 @@ class Maze:
         :param weighted: Indica si se manejan pesos en las celdas.
         """
         self.grid = grid if grid else []
+        self.weights = []
         self.weighted = weighted
-        self.weights = []  # Misma dimensión que grid si weighted=True
 
     def setGrid(self, grid):
         """Define la estructura base del laberinto."""
@@ -31,15 +31,11 @@ class Maze:
         """Indica si la celda es transitable."""
         return self.grid[row][col] == 0
 
-    def getNeighbors(self, row, col, diagonals=False):
+    def getNeighbors(self, row, col):
         """
         Retorna vecinos válidos (transitables).
-        :param diagonals: Si se permite moverse en diagonal.
         """
         moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        if diagonals:
-            moves += [(-1, -1), (-1, 1), (1, -1), (1, 1)]
-
         neighbors = []
         rows = len(self.grid)
         cols = len(self.grid[0]) if rows > 0 else 0
@@ -50,12 +46,3 @@ class Maze:
                 neighbors.append((nr, nc))
         return neighbors
 
-    def printMaze(self):
-        """Imprime el laberinto en consola de forma simple."""
-        for row in self.grid:
-            print("".join(['█' if cell == 1 else ' ' for cell in row]))
-
-    def resetWeights(self):
-        """Elimina cualquier peso asociado."""
-        self.weights = []
-        self.weighted = False
