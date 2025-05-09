@@ -1,6 +1,6 @@
 # Comparacion de algoritmos de busqueda
 
-from algoritmos_busqueda import *
+from algoritmos.algoritmos_busqueda import *
 import numpy as np
 from queue import Queue, PriorityQueue
 import time
