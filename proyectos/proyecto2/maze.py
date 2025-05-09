@@ -25,7 +25,6 @@ class Maze:
         """Retorna el peso de la celda, si no hay pesos definidos retorna 1."""
         if self.weighted and self.weights:
             return self.weights[row][col]
-        return 1
 
     def isWalkable(self, row, col):
         """Indica si la celda es transitable."""

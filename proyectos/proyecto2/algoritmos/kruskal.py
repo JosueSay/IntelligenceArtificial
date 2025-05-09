@@ -13,6 +13,7 @@ WINDOW_SIZE = (1280, 720)
 BACKGROUND_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
 USE_WEIGHTED = False            # indica si se usará un laberinto ponderado
+USE_LOGS = True                # indica si se generará un log de la ejecución
 # ===================================================
 
 class UnionFind:
@@ -112,9 +113,17 @@ class KruskalMazeGenerator:
                 grid[r1 + r2 + 1][c1 + c2 + 1] = 0
 
                 # Asignar peso al camino generado
-                weights_grid[2 * r1 + 1][2 * c1 + 1] = weight
-                weights_grid[2 * r2 + 1][2 * c2 + 1] = weight
                 weights_grid[r1 + r2 + 1][c1 + c2 + 1] = weight
+                # weights_grid[2 * r1 + 1][2 * c1 + 1] = weight
+                # weights_grid[2 * r2 + 1][2 * c2 + 1] = weight
+                
+                
+                
+                # LOG:
+                if USE_LOGS:
+                    with open("verificacion_mst.txt", "a", encoding="utf-8") as f:  # 'a' para añadir sin sobrescribir
+                        f.write(f"Arista conectada: ({r1}, {c1}) <-> ({r2}, {c2}) | Peso asignado: {weight} con casilla ({r1+r2+1}, {c1+c2+1})\n")
+                        f.write(f"\t- casilla inicio: ({2*r1+1}, {2*c1+1})\n\t- casilla camino: ({r1+r2+1}, {c1+c2+1})\n\t- casilla destino: ({2*r2+1}, {2*c2+1})\n")
 
                 cellSize, offsetX, offsetY = drawAndResize()
                 self.drawMaze(screen, grid, cellSize, offsetX, offsetY)
@@ -125,6 +134,26 @@ class KruskalMazeGenerator:
 
         self.maze.setGrid(grid)
         self.maze.setWeights(weights_grid)
+        
+        # LOG:
+        if USE_LOGS:
+            with open("verificacion_mst.txt", "a", encoding="utf-8") as f:
+                f.write("=== Verificación de Pesos en el MST ===\n\n")
+                f.write("Grid del Laberinto ('vacio' = Camino, █ = Muro):\n")
+                for row in grid:
+                    f.write("".join(['█' if cell == 1 else ' ' for cell in row]) + "\n")
+
+                f.write("\nGrid de Pesos:\n")
+                for row in weights_grid:
+                    f.write(" ".join([str(cell).rjust(2) for cell in row]) + "\n")
+
+                f.write("\nDetalle de Celdas Transitables y sus Pesos:\n")
+                for r in range(len(grid)):
+                    for c in range(len(grid[0])):
+                        if grid[r][c] == 0:
+                            f.write(f"Celda ({r}, {c}): Peso {weights_grid[r][c]}\n")
+
+                f.write("\n=======================================\n")
 
         return self.maze
 

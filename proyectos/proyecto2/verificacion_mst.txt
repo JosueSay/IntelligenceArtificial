@@ -1,0 +1,144 @@
+Arista conectada: (1, 0) <-> (2, 0) | Peso asignado: 2 con casilla (4, 1)
+	- casilla inicio: (3, 1)
+	- casilla camino: (4, 1)
+	- casilla destino: (5, 1)
+Arista conectada: (1, 2) <-> (2, 2) | Peso asignado: 2 con casilla (4, 5)
+	- casilla inicio: (3, 5)
+	- casilla camino: (4, 5)
+	- casilla destino: (5, 5)
+Arista conectada: (0, 1) <-> (0, 2) | Peso asignado: 3 con casilla (1, 4)
+	- casilla inicio: (1, 3)
+	- casilla camino: (1, 4)
+	- casilla destino: (1, 5)
+Arista conectada: (0, 0) <-> (0, 1) | Peso asignado: 5 con casilla (1, 2)
+	- casilla inicio: (1, 1)
+	- casilla camino: (1, 2)
+	- casilla destino: (1, 3)
+Arista conectada: (0, 0) <-> (1, 0) | Peso asignado: 5 con casilla (2, 1)
+	- casilla inicio: (1, 1)
+	- casilla camino: (2, 1)
+	- casilla destino: (3, 1)
+Arista conectada: (0, 2) <-> (1, 2) | Peso asignado: 6 con casilla (2, 5)
+	- casilla inicio: (1, 5)
+	- casilla camino: (2, 5)
+	- casilla destino: (3, 5)
+Arista conectada: (1, 0) <-> (1, 1) | Peso asignado: 8 con casilla (3, 2)
+	- casilla inicio: (3, 1)
+	- casilla camino: (3, 2)
+	- casilla destino: (3, 3)
+Arista conectada: (2, 0) <-> (2, 1) | Peso asignado: 8 con casilla (5, 2)
+	- casilla inicio: (5, 1)
+	- casilla camino: (5, 2)
+	- casilla destino: (5, 3)
+=== Verificación de Pesos en el MST ===
+
+Grid del Laberinto ('vacio' = Camino, █ = Muro):
+███████
+█     █
+█ ███ █
+█   █ █
+█ ███ █
+█   █ █
+███████
+
+Grid de Pesos:
+ 0  0  0  0  0  0  0
+ 0  0  5  0  3  0  0
+ 0  5  0  0  0  6  0
+ 0  0  8  0  0  0  0
+ 0  2  0  0  0  2  0
+ 0  0  8  0  0  0  0
+ 0  0  0  0  0  0  0
+
+Detalle de Celdas Transitables y sus Pesos:
+Celda (1, 1): Peso 0
+Celda (1, 2): Peso 5
+Celda (1, 3): Peso 0
+Celda (1, 4): Peso 3
+Celda (1, 5): Peso 0
+Celda (2, 1): Peso 5
+Celda (2, 5): Peso 6
+Celda (3, 1): Peso 0
+Celda (3, 2): Peso 8
+Celda (3, 3): Peso 0
+Celda (3, 5): Peso 0
+Celda (4, 1): Peso 2
+Celda (4, 5): Peso 2
+Celda (5, 1): Peso 0
+Celda (5, 2): Peso 8
+Celda (5, 3): Peso 0
+Celda (5, 5): Peso 0
+
+=======================================
+Arista conectada: (1, 0) <-> (1, 1) | Peso asignado: 1 con casilla (3, 2)
+	- casilla inicio: (3, 1)
+	- casilla camino: (3, 2)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 1) <-> (1, 2) | Peso asignado: 1 con casilla (3, 4)
+	- casilla inicio: (3, 3)
+	- casilla camino: (3, 4)
+	- casilla destino: (3, 5)
+Arista conectada: (0, 2) <-> (1, 2) | Peso asignado: 1 con casilla (2, 5)
+	- casilla inicio: (1, 5)
+	- casilla camino: (2, 5)
+	- casilla destino: (3, 5)
+Arista conectada: (2, 0) <-> (2, 1) | Peso asignado: 1 con casilla (5, 2)
+	- casilla inicio: (5, 1)
+	- casilla camino: (5, 2)
+	- casilla destino: (5, 3)
+Arista conectada: (1, 2) <-> (2, 2) | Peso asignado: 1 con casilla (4, 5)
+	- casilla inicio: (3, 5)
+	- casilla camino: (4, 5)
+	- casilla destino: (5, 5)
+Arista conectada: (0, 0) <-> (1, 0) | Peso asignado: 1 con casilla (2, 1)
+	- casilla inicio: (1, 1)
+	- casilla camino: (2, 1)
+	- casilla destino: (3, 1)
+Arista conectada: (2, 1) <-> (2, 2) | Peso asignado: 1 con casilla (5, 4)
+	- casilla inicio: (5, 3)
+	- casilla camino: (5, 4)
+	- casilla destino: (5, 5)
+Arista conectada: (0, 0) <-> (0, 1) | Peso asignado: 1 con casilla (1, 2)
+	- casilla inicio: (1, 1)
+	- casilla camino: (1, 2)
+	- casilla destino: (1, 3)
+=== Verificación de Pesos en el MST ===
+
+Grid del Laberinto ('vacio' = Camino, █ = Muro):
+███████
+█   █ █
+█ ███ █
+█     █
+█████ █
+█     █
+███████
+
+Grid de Pesos:
+ 0  0  0  0  0  0  0
+ 0  0  1  0  0  0  0
+ 0  1  0  0  0  1  0
+ 0  0  1  0  1  0  0
+ 0  0  0  0  0  1  0
+ 0  0  1  0  1  0  0
+ 0  0  0  0  0  0  0
+
+Detalle de Celdas Transitables y sus Pesos:
+Celda (1, 1): Peso 0
+Celda (1, 2): Peso 1
+Celda (1, 3): Peso 0
+Celda (1, 5): Peso 0
+Celda (2, 1): Peso 1
+Celda (2, 5): Peso 1
+Celda (3, 1): Peso 0
+Celda (3, 2): Peso 1
+Celda (3, 3): Peso 0
+Celda (3, 4): Peso 1
+Celda (3, 5): Peso 0
+Celda (4, 5): Peso 1
+Celda (5, 1): Peso 0
+Celda (5, 2): Peso 1
+Celda (5, 3): Peso 0
+Celda (5, 4): Peso 1
+Celda (5, 5): Peso 0
+
+=======================================
