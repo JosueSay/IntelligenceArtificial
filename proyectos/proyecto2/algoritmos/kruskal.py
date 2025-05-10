@@ -10,10 +10,11 @@ DEFAULT_SEED_STRUCTURE = None  # semilla para la generación de la estructura
 DEFAULT_SEED_WEIGHTS = None    # semilla para la asignación de pesos
 ANIMATION_DELAY = 0.005        # segundos
 WINDOW_SIZE = (1280, 720)
-BACKGROUND_COLOR = (255, 255, 255)
+BACKGROUND_COLOR = (55, 55, 55)
+PATH_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
 USE_WEIGHTED = False            # indica si se usará un laberinto ponderado
-USE_LOGS = True                # indica si se generará un log de la ejecución
+USE_LOGS = False                # indica si se generará un log de la ejecución
 # ===================================================
 
 class UnionFind:
@@ -69,7 +70,7 @@ class KruskalMazeGenerator:
 
         def drawAndResize():
             screenWidth, screenHeight = screen.get_size()
-            cellSize = min(screenWidth // (2 * self.cols + 1), screenHeight // (2 * self.rows + 1))
+            cellSize = min(screenWidth // (2 * self.cols + 1), screenHeight // (2 * self.rows + 1)) # Las posiciones pares en el grid son muros, y las impares son las casillas de paso.
             mazeWidth = cellSize * (2 * self.cols + 1)
             mazeHeight = cellSize * (2 * self.rows + 1)
             offsetX = (screenWidth - mazeWidth) // 2
@@ -81,17 +82,16 @@ class KruskalMazeGenerator:
         weights_grid = [[0 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
         uf = UnionFind(self.rows * self.cols) # inicializar parent-rank
 
-        # grafo (u,v)
+        # conexiones horizontales (misma fila, distintas columnas consecutivas) y conexiones verticales (misma columna, distintas filas consecutivas) = grafo (u,v)
         edges = [((r, c), (r, c + 1)) for r in range(self.rows) for c in range(self.cols - 1)] + [((r, c), (r + 1, c)) for r in range(self.rows - 1) for c in range(self.cols)]
 
-        if self.weighted: # tripleta (w, u, v) = (w, arista)
+        if self.weighted: # tripleta (w, u, v) = (w, arista) con w aleatorizado
             random.seed(self.seed_weights)
             edges_with_weights = [(random.randint(1, 10), edge) for edge in edges]
             edges_with_weights.sort(key=lambda x: x[0])
-        else:
+        else: # tripleta (w, u, v) = (w, arista) con w = 1
             random.shuffle(edges)
             edges_with_weights = [(1, edge) for edge in edges]
-
 
         for weight, (r1, c1), (r2, c2) in [(w, *e) for w, e in edges_with_weights]:
             for event in pygame.event.get():
@@ -105,9 +105,10 @@ class KruskalMazeGenerator:
                     self.maze.setWeights(weights_grid)
                     return self.maze
 
+            # Conversion de vector dimensional a unidimensional u,v -> idx1, idx2 (índices en el array de UnionFind)
             idx1 = r1 * self.cols + c1
             idx2 = r2 * self.cols + c2
-            if uf.union(idx1, idx2):
+            if uf.union(idx1, idx2): # aplicación de union-find para evitar ciclos (se añade o no al MST)
                 grid[2 * r1 + 1][2 * c1 + 1] = 0
                 grid[2 * r2 + 1][2 * c2 + 1] = 0
                 grid[r1 + r2 + 1][c1 + c2 + 1] = 0
@@ -116,8 +117,6 @@ class KruskalMazeGenerator:
                 weights_grid[r1 + r2 + 1][c1 + c2 + 1] = weight
                 # weights_grid[2 * r1 + 1][2 * c1 + 1] = weight
                 # weights_grid[2 * r2 + 1][2 * c2 + 1] = weight
-                
-                
                 
                 # LOG:
                 if USE_LOGS:
@@ -161,7 +160,7 @@ class KruskalMazeGenerator:
         screen.fill(BACKGROUND_COLOR)
         for r, row in enumerate(grid):
             for c, val in enumerate(row):
-                color = WALL_COLOR if val == 1 else BACKGROUND_COLOR
+                color = WALL_COLOR if val == 1 else PATH_COLOR
                 pygame.draw.rect(
                     screen,
                     color,
