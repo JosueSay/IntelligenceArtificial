@@ -1,3 +1,7 @@
+import numpy as np
+import time
+from queue import Queue 
+import heapq
 
 # Maze va a ser el laberinto, lo voy a definir posteriormente en Problema3.py
 
@@ -8,7 +12,7 @@ def bfs(maze, start, end):
     queue.put(start)
     visited = set([start])
     parent = {start: None}
-    nodes_exploded = 0
+    nodes_explored = 0
 
     # Mientras no se haya terminado el laberinto
     while not queue.empty():
@@ -168,3 +172,5 @@ def a_star(maze, start, end):
         path.reverse()
         
     return path, nodes_explored
+
+
