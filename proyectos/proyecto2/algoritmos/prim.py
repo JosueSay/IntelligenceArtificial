@@ -15,7 +15,7 @@ PATH_COLOR = (255, 255, 255)
 WALL_COLOR = (0, 0, 0)
 FRONTIER_COLOR = (255, 0, 0)    # Color para las celdas en la frontera
 USE_WEIGHTED = False            # Indica si se usará un laberinto ponderado
-USE_LOGS = True
+USE_LOGS = False
 # ===================================================
 
 class PrimMazeGenerator:

@@ -116,11 +116,11 @@ class LaberintoApp:
                         self.mainMenu()
                         selecting = False
                     elif event.key in (pygame.K_2, pygame.K_KP2):
-                        self.searchAlgorithmMenu()
+                        self.searchAlgorithmMenu(laberinto)
                     elif event.key == pygame.K_ESCAPE:
                         selecting = False
 
-    def searchAlgorithmMenu(self):
+    def searchAlgorithmMenu(self, laberinto):
         selecting = True
         while selecting:
             self.screen.fill(BACKGROUND_COLOR)
