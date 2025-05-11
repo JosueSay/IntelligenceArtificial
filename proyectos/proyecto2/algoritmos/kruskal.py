@@ -77,7 +77,7 @@ class KruskalMazeGenerator:
             offsetY = (screenHeight - mazeHeight) // 2
             return cellSize, offsetX, offsetY
 
-        cellSize, offsetX, offsetY = drawAndResize()
+        cellSize, offsetX, offsetY = drawAndResize() # recalcular las dimensiones antes de dibujar el laberinto
         grid = [[1 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
         weights_grid = [[0 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
         uf = UnionFind(self.rows * self.cols) # inicializar parent-rank
@@ -120,11 +120,11 @@ class KruskalMazeGenerator:
                 
                 # LOG:
                 if USE_LOGS:
-                    with open("verificacion_mst.txt", "a", encoding="utf-8") as f:  # 'a' para añadir sin sobrescribir
+                    with open("kruskal_verification.txt", "a", encoding="utf-8") as f:  # 'a' para añadir sin sobrescribir
                         f.write(f"Arista conectada: ({r1}, {c1}) <-> ({r2}, {c2}) | Peso asignado: {weight} con casilla ({r1+r2+1}, {c1+c2+1})\n")
                         f.write(f"\t- casilla inicio: ({2*r1+1}, {2*c1+1})\n\t- casilla camino: ({r1+r2+1}, {c1+c2+1})\n\t- casilla destino: ({2*r2+1}, {2*c2+1})\n")
 
-                cellSize, offsetX, offsetY = drawAndResize()
+                cellSize, offsetX, offsetY = drawAndResize() # recalcular las dimensiones durante el dibujo del laberinto
                 self.drawMaze(screen, grid, cellSize, offsetX, offsetY)
                 time.sleep(ANIMATION_DELAY)
 
@@ -136,7 +136,7 @@ class KruskalMazeGenerator:
         
         # LOG:
         if USE_LOGS:
-            with open("verificacion_mst.txt", "a", encoding="utf-8") as f:
+            with open("kruskal_verification.txt", "a", encoding="utf-8") as f:
                 f.write("=== Verificación de Pesos en el MST ===\n\n")
                 f.write("Grid del Laberinto ('vacio' = Camino, █ = Muro):\n")
                 for row in grid:

@@ -1,0 +1,448 @@
+Arista conectada: (4, 0) <-> (3, 0) | Peso asignado: 3 con casilla (8, 1)
+	- casilla inicio: (9, 1)
+	- casilla camino: (8, 1)
+	- casilla destino: (7, 1)
+Arista conectada: (3, 1) <-> (3, 0) | Peso asignado: 3 con casilla (7, 2)
+	- casilla inicio: (7, 3)
+	- casilla camino: (7, 2)
+	- casilla destino: (7, 1)
+Arista conectada: (4, 1) <-> (4, 0) | Peso asignado: 3 con casilla (9, 2)
+	- casilla inicio: (9, 3)
+	- casilla camino: (9, 2)
+	- casilla destino: (9, 1)
+Arista conectada: (2, 1) <-> (3, 1) | Peso asignado: 3 con casilla (6, 3)
+	- casilla inicio: (5, 3)
+	- casilla camino: (6, 3)
+	- casilla destino: (7, 3)
+Arista conectada: (3, 2) <-> (3, 1) | Peso asignado: 3 con casilla (7, 4)
+	- casilla inicio: (7, 5)
+	- casilla camino: (7, 4)
+	- casilla destino: (7, 3)
+Arista conectada: (4, 2) <-> (4, 1) | Peso asignado: 3 con casilla (9, 4)
+	- casilla inicio: (9, 5)
+	- casilla camino: (9, 4)
+	- casilla destino: (9, 3)
+Arista conectada: (1, 1) <-> (2, 1) | Peso asignado: 3 con casilla (4, 3)
+	- casilla inicio: (3, 3)
+	- casilla camino: (4, 3)
+	- casilla destino: (5, 3)
+Arista conectada: (2, 2) <-> (2, 1) | Peso asignado: 3 con casilla (5, 4)
+	- casilla inicio: (5, 5)
+	- casilla camino: (5, 4)
+	- casilla destino: (5, 3)
+Arista conectada: (3, 3) <-> (3, 2) | Peso asignado: 3 con casilla (7, 6)
+	- casilla inicio: (7, 7)
+	- casilla camino: (7, 6)
+	- casilla destino: (7, 5)
+Arista conectada: (4, 3) <-> (4, 2) | Peso asignado: 3 con casilla (9, 6)
+	- casilla inicio: (9, 7)
+	- casilla camino: (9, 6)
+	- casilla destino: (9, 5)
+Arista conectada: (0, 1) <-> (1, 1) | Peso asignado: 3 con casilla (2, 3)
+	- casilla inicio: (1, 3)
+	- casilla camino: (2, 3)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 0) <-> (1, 1) | Peso asignado: 3 con casilla (3, 2)
+	- casilla inicio: (3, 1)
+	- casilla camino: (3, 2)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 2) <-> (1, 1) | Peso asignado: 3 con casilla (3, 4)
+	- casilla inicio: (3, 5)
+	- casilla camino: (3, 4)
+	- casilla destino: (3, 3)
+Arista conectada: (2, 3) <-> (2, 2) | Peso asignado: 3 con casilla (5, 6)
+	- casilla inicio: (5, 7)
+	- casilla camino: (5, 6)
+	- casilla destino: (5, 5)
+Arista conectada: (3, 4) <-> (3, 3) | Peso asignado: 3 con casilla (7, 8)
+	- casilla inicio: (7, 9)
+	- casilla camino: (7, 8)
+	- casilla destino: (7, 7)
+Arista conectada: (4, 4) <-> (4, 3) | Peso asignado: 3 con casilla (9, 8)
+	- casilla inicio: (9, 9)
+	- casilla camino: (9, 8)
+	- casilla destino: (9, 7)
+Arista conectada: (0, 0) <-> (0, 1) | Peso asignado: 3 con casilla (1, 2)
+	- casilla inicio: (1, 1)
+	- casilla camino: (1, 2)
+	- casilla destino: (1, 3)
+Arista conectada: (0, 2) <-> (0, 1) | Peso asignado: 3 con casilla (1, 4)
+	- casilla inicio: (1, 5)
+	- casilla camino: (1, 4)
+	- casilla destino: (1, 3)
+Arista conectada: (1, 3) <-> (1, 2) | Peso asignado: 3 con casilla (3, 6)
+	- casilla inicio: (3, 7)
+	- casilla camino: (3, 6)
+	- casilla destino: (3, 5)
+Arista conectada: (2, 4) <-> (2, 3) | Peso asignado: 3 con casilla (5, 8)
+	- casilla inicio: (5, 9)
+	- casilla camino: (5, 8)
+	- casilla destino: (5, 7)
+Arista conectada: (0, 3) <-> (0, 2) | Peso asignado: 3 con casilla (1, 6)
+	- casilla inicio: (1, 7)
+	- casilla camino: (1, 6)
+	- casilla destino: (1, 5)
+Arista conectada: (1, 4) <-> (1, 3) | Peso asignado: 3 con casilla (3, 8)
+	- casilla inicio: (3, 9)
+	- casilla camino: (3, 8)
+	- casilla destino: (3, 7)
+Arista conectada: (0, 4) <-> (0, 3) | Peso asignado: 3 con casilla (1, 8)
+	- casilla inicio: (1, 9)
+	- casilla camino: (1, 8)
+	- casilla destino: (1, 7)
+Arista conectada: (2, 0) <-> (1, 0) | Peso asignado: 5 con casilla (4, 1)
+	- casilla inicio: (5, 1)
+	- casilla camino: (4, 1)
+	- casilla destino: (3, 1)
+Arista conectada: (4, 0) <-> (3, 0) | Peso asignado: 3 con casilla (8, 1)
+	- casilla inicio: (9, 1)
+	- casilla camino: (8, 1)
+	- casilla destino: (7, 1)
+Arista conectada: (3, 1) <-> (3, 0) | Peso asignado: 3 con casilla (7, 2)
+	- casilla inicio: (7, 3)
+	- casilla camino: (7, 2)
+	- casilla destino: (7, 1)
+Arista conectada: (4, 1) <-> (4, 0) | Peso asignado: 3 con casilla (9, 2)
+	- casilla inicio: (9, 3)
+	- casilla camino: (9, 2)
+	- casilla destino: (9, 1)
+Arista conectada: (2, 1) <-> (3, 1) | Peso asignado: 3 con casilla (6, 3)
+	- casilla inicio: (5, 3)
+	- casilla camino: (6, 3)
+	- casilla destino: (7, 3)
+Arista conectada: (3, 2) <-> (3, 1) | Peso asignado: 3 con casilla (7, 4)
+	- casilla inicio: (7, 5)
+	- casilla camino: (7, 4)
+	- casilla destino: (7, 3)
+Arista conectada: (4, 2) <-> (4, 1) | Peso asignado: 3 con casilla (9, 4)
+	- casilla inicio: (9, 5)
+	- casilla camino: (9, 4)
+	- casilla destino: (9, 3)
+Arista conectada: (1, 1) <-> (2, 1) | Peso asignado: 3 con casilla (4, 3)
+	- casilla inicio: (3, 3)
+	- casilla camino: (4, 3)
+	- casilla destino: (5, 3)
+Arista conectada: (2, 2) <-> (2, 1) | Peso asignado: 3 con casilla (5, 4)
+	- casilla inicio: (5, 5)
+	- casilla camino: (5, 4)
+	- casilla destino: (5, 3)
+Arista conectada: (3, 3) <-> (3, 2) | Peso asignado: 3 con casilla (7, 6)
+	- casilla inicio: (7, 7)
+	- casilla camino: (7, 6)
+	- casilla destino: (7, 5)
+Arista conectada: (4, 3) <-> (4, 2) | Peso asignado: 3 con casilla (9, 6)
+	- casilla inicio: (9, 7)
+	- casilla camino: (9, 6)
+	- casilla destino: (9, 5)
+Arista conectada: (0, 1) <-> (1, 1) | Peso asignado: 3 con casilla (2, 3)
+	- casilla inicio: (1, 3)
+	- casilla camino: (2, 3)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 0) <-> (1, 1) | Peso asignado: 3 con casilla (3, 2)
+	- casilla inicio: (3, 1)
+	- casilla camino: (3, 2)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 2) <-> (1, 1) | Peso asignado: 3 con casilla (3, 4)
+	- casilla inicio: (3, 5)
+	- casilla camino: (3, 4)
+	- casilla destino: (3, 3)
+Arista conectada: (2, 3) <-> (2, 2) | Peso asignado: 3 con casilla (5, 6)
+	- casilla inicio: (5, 7)
+	- casilla camino: (5, 6)
+	- casilla destino: (5, 5)
+Arista conectada: (3, 4) <-> (3, 3) | Peso asignado: 3 con casilla (7, 8)
+	- casilla inicio: (7, 9)
+	- casilla camino: (7, 8)
+	- casilla destino: (7, 7)
+Arista conectada: (4, 4) <-> (4, 3) | Peso asignado: 3 con casilla (9, 8)
+	- casilla inicio: (9, 9)
+	- casilla camino: (9, 8)
+	- casilla destino: (9, 7)
+Arista conectada: (0, 0) <-> (0, 1) | Peso asignado: 3 con casilla (1, 2)
+	- casilla inicio: (1, 1)
+	- casilla camino: (1, 2)
+	- casilla destino: (1, 3)
+Arista conectada: (0, 2) <-> (0, 1) | Peso asignado: 3 con casilla (1, 4)
+	- casilla inicio: (1, 5)
+	- casilla camino: (1, 4)
+	- casilla destino: (1, 3)
+Arista conectada: (1, 3) <-> (1, 2) | Peso asignado: 3 con casilla (3, 6)
+	- casilla inicio: (3, 7)
+	- casilla camino: (3, 6)
+	- casilla destino: (3, 5)
+Arista conectada: (2, 4) <-> (2, 3) | Peso asignado: 3 con casilla (5, 8)
+	- casilla inicio: (5, 9)
+	- casilla camino: (5, 8)
+	- casilla destino: (5, 7)
+Arista conectada: (0, 3) <-> (0, 2) | Peso asignado: 3 con casilla (1, 6)
+	- casilla inicio: (1, 7)
+	- casilla camino: (1, 6)
+	- casilla destino: (1, 5)
+Arista conectada: (1, 4) <-> (1, 3) | Peso asignado: 3 con casilla (3, 8)
+	- casilla inicio: (3, 9)
+	- casilla camino: (3, 8)
+	- casilla destino: (3, 7)
+Arista conectada: (0, 4) <-> (0, 3) | Peso asignado: 3 con casilla (1, 8)
+	- casilla inicio: (1, 9)
+	- casilla camino: (1, 8)
+	- casilla destino: (1, 7)
+Arista conectada: (2, 0) <-> (3, 0) | Peso asignado: 5 con casilla (6, 1)
+	- casilla inicio: (5, 1)
+	- casilla camino: (6, 1)
+	- casilla destino: (7, 1)
+=== Verificación de Pesos en el MST ===
+
+Grid del Laberinto ('vacio' = Camino, █ = Muro):
+███████████
+█         █
+███ ███████
+█         █
+███ ███████
+█ █       █
+█ █ ███████
+█         █
+█ █████████
+█         █
+███████████
+
+Grid de Pesos:
+ 0  0  0  0  0  0  0  0  0  0  0
+ 0  0  3  0  3  0  3  0  3  0  0
+ 0  0  0  3  0  0  0  0  0  0  0
+ 0  0  3  0  3  0  3  0  3  0  0
+ 0  0  0  3  0  0  0  0  0  0  0
+ 0  0  0  0  3  0  3  0  3  0  0
+ 0  5  0  3  0  0  0  0  0  0  0
+ 0  0  3  0  3  0  3  0  3  0  0
+ 0  3  0  0  0  0  0  0  0  0  0
+ 0  0  3  0  3  0  3  0  3  0  0
+ 0  0  0  0  0  0  0  0  0  0  0
+
+Detalle de Celdas Transitables y sus Pesos:
+Celda (1, 1): Peso 0
+Celda (1, 2): Peso 3
+Celda (1, 3): Peso 0
+Celda (1, 4): Peso 3
+Celda (1, 5): Peso 0
+Celda (1, 6): Peso 3
+Celda (1, 7): Peso 0
+Celda (1, 8): Peso 3
+Celda (1, 9): Peso 0
+Celda (2, 3): Peso 3
+Celda (3, 1): Peso 0
+Celda (3, 2): Peso 3
+Celda (3, 3): Peso 0
+Celda (3, 4): Peso 3
+Celda (3, 5): Peso 0
+Celda (3, 6): Peso 3
+Celda (3, 7): Peso 0
+Celda (3, 8): Peso 3
+Celda (3, 9): Peso 0
+Celda (4, 3): Peso 3
+Celda (5, 1): Peso 0
+Celda (5, 3): Peso 0
+Celda (5, 4): Peso 3
+Celda (5, 5): Peso 0
+Celda (5, 6): Peso 3
+Celda (5, 7): Peso 0
+Celda (5, 8): Peso 3
+Celda (5, 9): Peso 0
+Celda (6, 1): Peso 5
+Celda (6, 3): Peso 3
+Celda (7, 1): Peso 0
+Celda (7, 2): Peso 3
+Celda (7, 3): Peso 0
+Celda (7, 4): Peso 3
+Celda (7, 5): Peso 0
+Celda (7, 6): Peso 3
+Celda (7, 7): Peso 0
+Celda (7, 8): Peso 3
+Celda (7, 9): Peso 0
+Celda (8, 1): Peso 3
+Celda (9, 1): Peso 0
+Celda (9, 2): Peso 3
+Celda (9, 3): Peso 0
+Celda (9, 4): Peso 3
+Celda (9, 5): Peso 0
+Celda (9, 6): Peso 3
+Celda (9, 7): Peso 0
+Celda (9, 8): Peso 3
+Celda (9, 9): Peso 0
+
+=======================================
+Arista conectada: (4, 0) <-> (3, 0) | Peso asignado: 1 con casilla (8, 1)
+	- casilla inicio: (9, 1)
+	- casilla camino: (8, 1)
+	- casilla destino: (7, 1)
+Arista conectada: (3, 1) <-> (3, 0) | Peso asignado: 1 con casilla (7, 2)
+	- casilla inicio: (7, 3)
+	- casilla camino: (7, 2)
+	- casilla destino: (7, 1)
+Arista conectada: (3, 2) <-> (3, 1) | Peso asignado: 1 con casilla (7, 4)
+	- casilla inicio: (7, 5)
+	- casilla camino: (7, 4)
+	- casilla destino: (7, 3)
+Arista conectada: (2, 2) <-> (3, 2) | Peso asignado: 1 con casilla (6, 5)
+	- casilla inicio: (5, 5)
+	- casilla camino: (6, 5)
+	- casilla destino: (7, 5)
+Arista conectada: (2, 3) <-> (2, 2) | Peso asignado: 1 con casilla (5, 6)
+	- casilla inicio: (5, 7)
+	- casilla camino: (5, 6)
+	- casilla destino: (5, 5)
+Arista conectada: (2, 4) <-> (2, 3) | Peso asignado: 1 con casilla (5, 8)
+	- casilla inicio: (5, 9)
+	- casilla camino: (5, 8)
+	- casilla destino: (5, 7)
+Arista conectada: (1, 4) <-> (2, 4) | Peso asignado: 1 con casilla (4, 9)
+	- casilla inicio: (3, 9)
+	- casilla camino: (4, 9)
+	- casilla destino: (5, 9)
+Arista conectada: (3, 4) <-> (2, 4) | Peso asignado: 1 con casilla (6, 9)
+	- casilla inicio: (7, 9)
+	- casilla camino: (6, 9)
+	- casilla destino: (5, 9)
+Arista conectada: (0, 4) <-> (1, 4) | Peso asignado: 1 con casilla (2, 9)
+	- casilla inicio: (1, 9)
+	- casilla camino: (2, 9)
+	- casilla destino: (3, 9)
+Arista conectada: (4, 4) <-> (3, 4) | Peso asignado: 1 con casilla (8, 9)
+	- casilla inicio: (9, 9)
+	- casilla camino: (8, 9)
+	- casilla destino: (7, 9)
+Arista conectada: (0, 3) <-> (0, 4) | Peso asignado: 1 con casilla (1, 8)
+	- casilla inicio: (1, 7)
+	- casilla camino: (1, 8)
+	- casilla destino: (1, 9)
+Arista conectada: (4, 3) <-> (4, 4) | Peso asignado: 1 con casilla (9, 8)
+	- casilla inicio: (9, 7)
+	- casilla camino: (9, 8)
+	- casilla destino: (9, 9)
+Arista conectada: (0, 2) <-> (0, 3) | Peso asignado: 1 con casilla (1, 6)
+	- casilla inicio: (1, 5)
+	- casilla camino: (1, 6)
+	- casilla destino: (1, 7)
+Arista conectada: (0, 1) <-> (0, 2) | Peso asignado: 1 con casilla (1, 4)
+	- casilla inicio: (1, 3)
+	- casilla camino: (1, 4)
+	- casilla destino: (1, 5)
+Arista conectada: (1, 1) <-> (0, 1) | Peso asignado: 1 con casilla (2, 3)
+	- casilla inicio: (3, 3)
+	- casilla camino: (2, 3)
+	- casilla destino: (1, 3)
+Arista conectada: (0, 0) <-> (0, 1) | Peso asignado: 1 con casilla (1, 2)
+	- casilla inicio: (1, 1)
+	- casilla camino: (1, 2)
+	- casilla destino: (1, 3)
+Arista conectada: (1, 0) <-> (1, 1) | Peso asignado: 1 con casilla (3, 2)
+	- casilla inicio: (3, 1)
+	- casilla camino: (3, 2)
+	- casilla destino: (3, 3)
+Arista conectada: (1, 3) <-> (2, 3) | Peso asignado: 1 con casilla (4, 7)
+	- casilla inicio: (3, 7)
+	- casilla camino: (4, 7)
+	- casilla destino: (5, 7)
+Arista conectada: (4, 2) <-> (4, 3) | Peso asignado: 1 con casilla (9, 6)
+	- casilla inicio: (9, 5)
+	- casilla camino: (9, 6)
+	- casilla destino: (9, 7)
+Arista conectada: (3, 3) <-> (3, 4) | Peso asignado: 1 con casilla (7, 8)
+	- casilla inicio: (7, 7)
+	- casilla camino: (7, 8)
+	- casilla destino: (7, 9)
+Arista conectada: (1, 2) <-> (1, 3) | Peso asignado: 1 con casilla (3, 6)
+	- casilla inicio: (3, 5)
+	- casilla camino: (3, 6)
+	- casilla destino: (3, 7)
+Arista conectada: (4, 1) <-> (4, 0) | Peso asignado: 1 con casilla (9, 2)
+	- casilla inicio: (9, 3)
+	- casilla camino: (9, 2)
+	- casilla destino: (9, 1)
+Arista conectada: (2, 1) <-> (3, 1) | Peso asignado: 1 con casilla (6, 3)
+	- casilla inicio: (5, 3)
+	- casilla camino: (6, 3)
+	- casilla destino: (7, 3)
+Arista conectada: (2, 0) <-> (3, 0) | Peso asignado: 1 con casilla (6, 1)
+	- casilla inicio: (5, 1)
+	- casilla camino: (6, 1)
+	- casilla destino: (7, 1)
+=== Verificación de Pesos en el MST ===
+
+Grid del Laberinto ('vacio' = Camino, █ = Muro):
+███████████
+█         █
+███ █████ █
+█   █   █ █
+███████ █ █
+█ █ █     █
+█ █ █ ███ █
+█     █   █
+█ ███████ █
+█   █     █
+███████████
+
+Grid de Pesos:
+ 0  0  0  0  0  0  0  0  0  0  0
+ 0  0  1  0  1  0  1  0  1  0  0
+ 0  0  0  1  0  0  0  0  0  1  0
+ 0  0  1  0  0  0  1  0  0  0  0
+ 0  0  0  0  0  0  0  1  0  1  0
+ 0  0  0  0  0  0  1  0  1  0  0
+ 0  1  0  1  0  1  0  0  0  1  0
+ 0  0  1  0  1  0  0  0  1  0  0
+ 0  1  0  0  0  0  0  0  0  1  0
+ 0  0  1  0  0  0  1  0  1  0  0
+ 0  0  0  0  0  0  0  0  0  0  0
+
+Detalle de Celdas Transitables y sus Pesos:
+Celda (1, 1): Peso 0
+Celda (1, 2): Peso 1
+Celda (1, 3): Peso 0
+Celda (1, 4): Peso 1
+Celda (1, 5): Peso 0
+Celda (1, 6): Peso 1
+Celda (1, 7): Peso 0
+Celda (1, 8): Peso 1
+Celda (1, 9): Peso 0
+Celda (2, 3): Peso 1
+Celda (2, 9): Peso 1
+Celda (3, 1): Peso 0
+Celda (3, 2): Peso 1
+Celda (3, 3): Peso 0
+Celda (3, 5): Peso 0
+Celda (3, 6): Peso 1
+Celda (3, 7): Peso 0
+Celda (3, 9): Peso 0
+Celda (4, 7): Peso 1
+Celda (4, 9): Peso 1
+Celda (5, 1): Peso 0
+Celda (5, 3): Peso 0
+Celda (5, 5): Peso 0
+Celda (5, 6): Peso 1
+Celda (5, 7): Peso 0
+Celda (5, 8): Peso 1
+Celda (5, 9): Peso 0
+Celda (6, 1): Peso 1
+Celda (6, 3): Peso 1
+Celda (6, 5): Peso 1
+Celda (6, 9): Peso 1
+Celda (7, 1): Peso 0
+Celda (7, 2): Peso 1
+Celda (7, 3): Peso 0
+Celda (7, 4): Peso 1
+Celda (7, 5): Peso 0
+Celda (7, 7): Peso 0
+Celda (7, 8): Peso 1
+Celda (7, 9): Peso 0
+Celda (8, 1): Peso 1
+Celda (8, 9): Peso 1
+Celda (9, 1): Peso 0
+Celda (9, 2): Peso 1
+Celda (9, 3): Peso 0
+Celda (9, 5): Peso 0
+Celda (9, 6): Peso 1
+Celda (9, 7): Peso 0
+Celda (9, 8): Peso 1
+Celda (9, 9): Peso 0
+
+=======================================
