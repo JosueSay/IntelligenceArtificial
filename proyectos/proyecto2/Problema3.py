@@ -216,98 +216,97 @@ def run_algorithm(maze, start, end, algorithm):
 
 # Función principal de visualización
 def visualize_algorithms(maze, start, end):
-    # Ejecutar todos los algoritmos
-    results = {
-        "BFS": run_algorithm(maze, start, end, bfs),
-        "DFS": run_algorithm(maze, start, end, dfs),
-        "UCS": run_algorithm(maze, start, end, uniform_cost_search),
-        "A*": run_algorithm(maze, start, end, a_star)
-    }
+    # Lista de algoritmos a ejecutar en orden
+    algorithms = [
+        ("BFS", bfs),
+        ("DFS", dfs),
+        ("UCS", uniform_cost_search),
+        ("A*", a_star)
+    ]
     
-    # Ordenar por tiempo de ejecución
+    results = {}
+    
+    # Ejecutar y visualizar cada algoritmo secuencialmente
+    for alg_name, algorithm in algorithms:
+        # Ejecutar algoritmo
+        result = run_algorithm(maze, start, end, algorithm)
+        results[alg_name] = result
+        
+        # Configurar visualización individual
+        current_step = 0
+        path_step = 0
+        completed = False
+        color = COLORS[alg_name]
+        
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+            
+            # Dibujar laberinto base
+            screen.fill(BLACK)
+            for r in range(ROWS):
+                for c in range(COLS):
+                    if maze[r, c] == 0:
+                        pygame.draw.rect(screen, WHITE, 
+                                       (c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar nodos visitados
+            if current_step < len(result['visited']):
+                nodes_to_draw = result['visited'][:current_step+1]
+                current_step += 8  # Ajustar velocidad de exploración
+            else:
+                completed = True
+                nodes_to_draw = result['visited']
+            
+            for node in nodes_to_draw:
+                pygame.draw.rect(screen, color,
+                               (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar camino
+            if completed and result['path']:
+                if path_step < len(result['path']):
+                    path_nodes = result['path'][:path_step+1]
+                    path_step += 3  # Ajustar velocidad del camino
+                else:
+                    path_nodes = result['path']
+                
+                for node in path_nodes:
+                    pygame.draw.rect(screen, ORANGE,
+                                   (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar inicio y fin
+            pygame.draw.rect(screen, GREEN, 
+                           (start[1]*CELL_SIZE, start[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            pygame.draw.rect(screen, RED, 
+                           (end[1]*CELL_SIZE, end[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Mostrar nombre del algoritmo
+            text = font.render(f"{alg_name} - Nodos: {result['nodes']} Tiempo: {result['time']:.2f}s", 
+                             True, color)
+            screen.blit(text, (10, 10))
+            
+            pygame.display.flip()
+            clock.tick(30)
+            
+            # Finalizar visualización cuando complete ambos pasos
+            if completed and path_step >= len(result['path']):
+                time.sleep(2)  # Pausa final
+                running = False
+        
+        # Limpiar pantalla entre algoritmos
+        screen.fill(BLACK)
+        pygame.display.flip()
+        time.sleep(0.5)
+    
+    # Mostrar estadísticas finales
+    print("\n=== Comparación final ===")
     sorted_results = sorted(results.items(), key=lambda x: x[1]['time'])
-    
-    # Imprimir estadísticas en consola
-    print("\n=== Comparación de algoritmos ===")
     print(f"{'Algoritmo':<10} | {'Tiempo (s)':<10} | {'Nodos explorados':<15} | {'Longitud camino':<15}")
     for name, data in sorted_results:
         print(f"{name:<10} | {data['time']:<10.4f} | {data['nodes']:<15} | {data['length']:<15}")
-    
-    print("\nClasificación por tiempo de ejecución:")
-    for i, (name, _) in enumerate(sorted_results, 1):
-        print(f"{i}. {name} ({COLORS[name]})")
-    
-    # Configuración de visualización
-    current_step = {alg: 0 for alg in results}
-    path_step = {alg: 0 for alg in results}
-    completed = {alg: False for alg in results}
-    
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-        
-        # Dibujar laberinto base
-        screen.fill(BLACK)
-        for r in range(ROWS):
-            for c in range(COLS):
-                if maze[r, c] == 0:
-                    pygame.draw.rect(screen, WHITE, (c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        
-        # Dibujar nodos visitados
-        for alg, data in results.items():
-            color = COLORS[alg]
-            visited = data['visited']
-            current = current_step[alg]
-            
-            if current < len(visited):
-                nodes_to_draw = visited[:current+1]
-                current_step[alg] += 5  # Velocidad de visualización
-            else:
-                nodes_to_draw = visited
-                completed[alg] = True
-                
-            for node in nodes_to_draw:
-                pygame.draw.rect(screen, color, 
-                               (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        
-        # Dibujar caminos
-        for alg, data in results.items():
-            if data['path']:
-                color = COLORS[alg]
-                path = data['path']
-                current_path = path_step[alg]
-                
-                if current_path < len(path):
-                    nodes_to_draw = path[:current_path+1]
-                    path_step[alg] += 2  # Velocidad del camino
-                else:
-                    nodes_to_draw = path
-                
-                for node in nodes_to_draw:
-                    pygame.draw.rect(screen, color,
-                                   (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        
-        # Dibujar inicio y fin
-        pygame.draw.rect(screen, GREEN, (start[1]*CELL_SIZE, start[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        pygame.draw.rect(screen, RED, (end[1]*CELL_SIZE, end[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        
-        # Dibujar leyenda
-        y_pos = 10
-        for alg, color in COLORS.items():
-            text = font.render(f"{alg}", True, color)
-            screen.blit(text, (10, y_pos))
-            y_pos += 25
-        
-        pygame.display.flip()
-        clock.tick(30)
-        
-        # Verificar si todos han terminado
-        if all(completed.values()) and all(p >= len(results[alg]['path']) for alg, p in path_step.items()):
-            time.sleep(5)
-            running = False
 
 # Ejecutar comparación
 maze = generate_maze(ROWS, COLS)
