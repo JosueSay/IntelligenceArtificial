@@ -3,8 +3,6 @@ import time
 from queue import Queue 
 import heapq
 
-# Maze va a ser el laberinto, lo voy a definir posteriormente en Problema3.py
-
 # Algoritmo bfs para recorrer el laberinto
 def bfs(maze, start, end):
     rows, cols = maze.shape
@@ -13,12 +11,10 @@ def bfs(maze, start, end):
     visited = set([start])
     parent = {start: None}
     nodes_explored = 0
-
     # Mientras no se haya terminado el laberinto
     while not queue.empty():
         current = queue.get()
         nodes_explored += 1
-
         if current == end:
             break
         # Ahora a explorar los vecinos
@@ -33,13 +29,12 @@ def bfs(maze, start, end):
     
     path = []
     current = end
-
     if end in parent:
         while current:
             path.append(current)
             current = parent[current]
         path.reverse()
-    return path, nodes_explored
+    return path, nodes_explored, visited
 
 def dfs(maze, start, end):
     rows, cols = maze.shape
@@ -75,7 +70,7 @@ def dfs(maze, start, end):
             current = parent[current]
         path.reverse()
         
-    return path, nodes_explored
+    return path, nodes_explored, visited
 
 def uniform_cost_search(maze, start, end):
     rows, cols = maze.shape
@@ -120,7 +115,7 @@ def uniform_cost_search(maze, start, end):
             current = parent[current]
         path.reverse()
         
-    return path, nodes_explored
+    return path, nodes_explored, visited
 
 def heuristic(a, b):
     # Distancia Manhattan
@@ -136,7 +131,7 @@ def a_star(maze, start, end):
     nodes_explored = 0
     
     while open_set:
-        _, current = heapq.heappop(open_set)
+        current_f, current = heapq.heappop(open_set)
         
         if current in closed_set:
             continue
@@ -171,6 +166,4 @@ def a_star(maze, start, end):
             current = parent[current]
         path.reverse()
         
-    return path, nodes_explored
-
-
+    return path, nodes_explored, closed_set
