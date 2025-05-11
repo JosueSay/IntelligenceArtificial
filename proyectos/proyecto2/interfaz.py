@@ -21,130 +21,128 @@ class LaberintoApp:
         pygame.display.set_caption("Generador de Laberintos")
         self.font = pygame.font.Font(None, FONT_SIZE)
         self.weighted = False
+        self.running = True
+        self.state = "main_menu"
 
     def run(self):
-        self.mainMenu()
+        while self.running:
+            if self.state == "main_menu":
+                self.mainMenu()
+            elif self.state == "algorithm_selection":
+                self.algorithmSelectionMenu()
+            elif self.state == "generate_maze":
+                self.runMazeGenerator()
+            elif self.state == "post_generation":
+                self.postGenerationMenu()
+            elif self.state == "search_algorithm":
+                self.searchAlgorithmMenu()
         pygame.quit()
         sys.exit()
 
     def mainMenu(self):
-        selecting = True
-        while selecting:
-            self.screen.fill(BACKGROUND_COLOR)
-            options = [
-                "1. Laberinto Ponderado",
-                "2. Laberinto No Ponderado",
-                "ESC. Salir"
-            ]
-            self.renderOptions(options)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    selecting = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key in (pygame.K_1, pygame.K_KP1):
-                        self.weighted = True
-                        self.algorithmSelectionMenu()
-                    elif event.key in (pygame.K_2, pygame.K_KP2):
-                        self.weighted = False
-                        self.algorithmSelectionMenu()
-                    elif event.key == pygame.K_ESCAPE:
-                        selecting = False
+        self.screen.fill(BACKGROUND_COLOR)
+        options = [
+            "1. Laberinto Ponderado",
+            "2. Laberinto No Ponderado",
+            "ESC. Salir"
+        ]
+        self.renderOptions(options)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_1, pygame.K_KP1):
+                    self.weighted = True
+                    self.state = "algorithm_selection"
+                elif event.key in (pygame.K_2, pygame.K_KP2):
+                    self.weighted = False
+                    self.state = "algorithm_selection"
+                elif event.key == pygame.K_ESCAPE:
+                    self.running = False
 
     def algorithmSelectionMenu(self):
-        selecting = True
-        while selecting:
-            self.screen.fill(BACKGROUND_COLOR)
-            options = [
-                "1. Kruskal",
-                "2. Prim",
-                "ESC. Volver"
-            ]
-            self.renderOptions(options)
+        self.screen.fill(BACKGROUND_COLOR)
+        options = [
+            "1. Kruskal",
+            "2. Prim",
+            "ESC. Volver"
+        ]
+        self.renderOptions(options)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_1, pygame.K_KP1):
+                    self.selected_algorithm = "kruskal"
+                    self.state = "generate_maze"
+                elif event.key in (pygame.K_2, pygame.K_KP2):
+                    self.selected_algorithm = "prim"
+                    self.state = "generate_maze"
+                elif event.key == pygame.K_ESCAPE:
+                    self.state = "main_menu"
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key in (pygame.K_1, pygame.K_KP1):
-                        self.runMazeGenerator("kruskal")
-                    elif event.key in (pygame.K_2, pygame.K_KP2):
-                        self.runMazeGenerator("prim")
-                    elif event.key == pygame.K_ESCAPE:
-                        selecting = False
-
-    def runMazeGenerator(self, algorithm):
+    def runMazeGenerator(self):
         self.promptDimensionsUI()
         rows, cols = self.promptDimensions()
 
-        if algorithm == "kruskal":
+        if self.selected_algorithm == "kruskal":
             generator = KruskalMazeGenerator(
-                rows=rows, cols=cols, 
-                weighted=self.weighted, 
-                seed_structure=DEFAULT_SEED_STRUCTURE, 
+                rows=rows, cols=cols,
+                weighted=self.weighted,
+                seed_structure=DEFAULT_SEED_STRUCTURE,
                 seed_weights=DEFAULT_SEED_WEIGHTS
             )
         else:
             generator = PrimMazeGenerator(
-                rows=rows, cols=cols, 
-                weighted=self.weighted, 
-                seed_structure=DEFAULT_SEED_STRUCTURE, 
+                rows=rows, cols=cols,
+                weighted=self.weighted,
+                seed_structure=DEFAULT_SEED_STRUCTURE,
                 seed_weights=DEFAULT_SEED_WEIGHTS
             )
 
-        laberinto = generator.generate()
-        self.postGenerationMenu(laberinto)
+        self.laberinto = generator.generate()
+        self.state = "post_generation"
 
-    def postGenerationMenu(self, laberinto):
-        selecting = True
-        while selecting:
-            self.screen.fill(BACKGROUND_COLOR)
-            options = [
-                "1. Generar nuevo laberinto",
-                "2. Aplicar algoritmo de búsqueda",
-                "ESC. Volver al menú principal"
-            ]
-            self.renderOptions(options)
+    def postGenerationMenu(self):
+        self.screen.fill(BACKGROUND_COLOR)
+        options = [
+            "1. Generar nuevo laberinto",
+            "2. Aplicar algoritmo de búsqueda",
+            "ESC. Volver al menú principal"
+        ]
+        self.renderOptions(options)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_1, pygame.K_KP1):
+                    self.state = "main_menu"
+                elif event.key in (pygame.K_2, pygame.K_KP2):
+                    self.state = "search_algorithm"
+                elif event.key == pygame.K_ESCAPE:
+                    self.state = "main_menu"
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key in (pygame.K_1, pygame.K_KP1):
-                        self.mainMenu()
-                        selecting = False
-                    elif event.key in (pygame.K_2, pygame.K_KP2):
-                        self.searchAlgorithmMenu(laberinto)
-                    elif event.key == pygame.K_ESCAPE:
-                        selecting = False
-
-    def searchAlgorithmMenu(self, laberinto):
-        selecting = True
-        while selecting:
-            self.screen.fill(BACKGROUND_COLOR)
-            options = [
-                "1. BFS",
-                "2. DFS",
-                "3. Cost Uniform Search",
-                "4. A*",
-                "ESC. Volver"
-            ]
-            self.renderOptions(options)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key in (pygame.K_1, pygame.K_KP1,
-                                     pygame.K_2, pygame.K_KP2,
-                                     pygame.K_3, pygame.K_KP3,
-                                     pygame.K_4, pygame.K_KP4):
-                        print("Aquí se aplica el algoritmo de búsqueda.")
-                    elif event.key == pygame.K_ESCAPE:
-                        selecting = False
+    def searchAlgorithmMenu(self):
+        self.screen.fill(BACKGROUND_COLOR)
+        options = [
+            "1. BFS",
+            "2. DFS",
+            "3. Cost Uniform Search",
+            "4. A*",
+            "ESC. Volver"
+        ]
+        self.renderOptions(options)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key in (pygame.K_1, pygame.K_KP1,
+                                 pygame.K_2, pygame.K_KP2,
+                                 pygame.K_3, pygame.K_KP3,
+                                 pygame.K_4, pygame.K_KP4):
+                    print("Aquí se aplica el algoritmo de búsqueda. USAR self.laberinto")
+                elif event.key == pygame.K_ESCAPE:
+                    self.state = "post_generation"
 
     def promptDimensionsUI(self):
         self.screen.fill(BACKGROUND_COLOR)
