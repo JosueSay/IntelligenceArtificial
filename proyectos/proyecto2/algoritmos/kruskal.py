@@ -87,7 +87,11 @@ class KruskalMazeGenerator:
 
         if self.weighted: # tripleta (w, u, v) = (w, arista) con w aleatorizado
             random.seed(self.seed_weights)
-            edges_with_weights = [(random.randint(1, 10), edge) for edge in edges]
+            edges_with_weights = []
+            for edge in edges:
+                weight = random.randint(1, 10)
+                # print(f"Peso asignado a la arista {edge}: {weight}")
+                edges_with_weights.append((weight, edge))
             edges_with_weights.sort(key=lambda x: x[0])
         else: # tripleta (w, u, v) = (w, arista) con w = 1
             random.shuffle(edges)

@@ -73,7 +73,7 @@ class PrimMazeGenerator:
                 if 0 <= nr < self.rows and 0 <= nc < self.cols and grid[2 * nr + 1][2 * nc + 1] == 1:
                     if self.weighted:
                         weight = random.randint(1, 10)
-                        print(f"Peso de la celda ({nr}, {nc}): {weight}")
+                        # print(f"Peso de la celda ({nr}, {nc}): {weight}")
                     else:
                         weight = 1
                     heapq.heappush(frontier, (weight, nr, nc))
@@ -95,7 +95,14 @@ class PrimMazeGenerator:
                     self.maze.setGrid(grid)
                     return self.maze
 
-            weight, r, c = heapq.heappop(frontier)
+            if self.weighted:
+                # Ponderado: usar la cola de prioridad para obtener la frontera con menor peso.
+                weight, r, c = heapq.heappop(frontier)
+            else:
+                # No ponderado: mezclar la frontera y seleccionar aleatoriamente.
+                random.shuffle(frontier)
+                weight, r, c = frontier.pop()
+
             if (r, c) in visited:
                 continue
 
@@ -128,6 +135,12 @@ class PrimMazeGenerator:
                 grid[wallR][wallC] = 0
                 weights_grid[wallR][wallC] = weight
 
+                # LOG:
+                if USE_LOGS:
+                    with open("prim_verification.txt", "a", encoding="utf-8") as f:
+                        f.write(f"Arista conectada: ({r}, {c}) <-> ({nr}, {nc}) | Peso asignado: {weight} con casilla ({wallR}, {wallC})\n")
+                        f.write(f"\t- casilla inicio: ({2*r+1}, {2*c+1})\n\t- casilla camino: ({wallR}, {wallC})\n\t- casilla destino: ({2*nr+1}, {2*nc+1})\n")
+
                 addFrontier(r, c)
 
             visited.add((r, c))
@@ -141,6 +154,27 @@ class PrimMazeGenerator:
 
         self.maze.setGrid(grid)
         self.maze.setWeights(weights_grid)
+        
+        # LOGS:
+        if USE_LOGS:
+            with open("prim_verification.txt", "a", encoding="utf-8") as f:
+                f.write("=== Verificación de Pesos en el MST ===\n\n")
+                f.write("Grid del Laberinto ('vacio' = Camino, █ = Muro):\n")
+                for row in grid:
+                    f.write("".join(['█' if cell == 1 else ' ' for cell in row]) + "\n")
+
+                f.write("\nGrid de Pesos:\n")
+                for row in weights_grid:
+                    f.write(" ".join([str(cell).rjust(2) for cell in row]) + "\n")
+
+                f.write("\nDetalle de Celdas Transitables y sus Pesos:\n")
+                for r in range(len(grid)):
+                    for c in range(len(grid[0])):
+                        if grid[r][c] == 0:
+                            f.write(f"Celda ({r}, {c}): Peso {weights_grid[r][c]}\n")
+
+                f.write("\n=======================================\n")
+        
         return self.maze
 
     def drawMaze(self, screen, grid, cellSize, offsetX, offsetY, frontier, visited):
