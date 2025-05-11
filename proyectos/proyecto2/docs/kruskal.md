@@ -1,40 +1,55 @@
-# Árbol de Expansión Mínima (Kruskal)
+# Algoritmo de Kruskal
 
-Los algoritmos **greedy** como Kruskal tienen el propósito de construir un Árbol de Expansión Mínima (MST), especialmente aplicados a **grafos ponderados**.
+El algoritmo de Kruskal es un método **greedy** utilizado para encontrar el Árbol de Expansión Mínima (MST) en un grafo. Este algoritmo ordena el peso de las aristas y conectandolos siempre y cuando sean disjuntos.
 
-## Inicio del Algoritmo de Kruskal (Aplicado al Laberinto)
+## Conceptos
 
-El objetivo es conectar las casillas del laberinto minimizando el peso total de las aristas conectadas.  
-Se seleccionan las conexiones de menor peso disponibles sin formar ciclos.
+* **Union-Find (Disjoint Set):** Estructura utilizada para detectar ciclos de forma eficiente durante la construcción del MST. Permite saber rápidamente si dos casillas ya están conectadas indirectamente.
+* **Ponderado en el Laberinto:**
+  En el contexto de la generación del laberinto, que sea **ponderado** significa que a cada conexión posible entre casillas (arista) se le asigna un **peso o costo** aleatorio. Este peso influye directamente en el orden en que se conectan las casillas.
 
-Un **ciclo**, en el contexto del laberinto, significa cerrar un camino que conecte de nuevo al mismo punto sin necesidad, lo que rompería la estructura de laberinto.
+  * Las conexiones con menor peso son preferidas, formando caminos "más baratos" en la estructura final del laberinto.
+  * Esto afecta la forma y complejidad del laberinto, priorizando ciertas rutas sobre otras.
+  * Si el laberinto es **no ponderado**, todas las aristas tienen el mismo peso, por lo que no hay preferencia en las conexiones, y el resultado es un laberinto más equilibrado y simétrico.
 
-Cada arista se representa como un triplete $(u, v, w)$, donde:
+## Implementación en la Generación de Laberintos
 
-- $u$ y $v$: Casillas conectadas.
-- $w$: Peso de la conexión.
+1. **Representación del Grafo:**
 
-La búsqueda de soluciones explora subconjuntos de aristas que formen árboles, y la cantidad de posibles MST crece exponencialmente con el número de nodos.
+   * Cada casilla es un nodo.
+   * Las conexiones horizontales y verticales entre casillas son las aristas.
+   * Si se trabaja con un laberinto ponderado, se asigna un peso aleatorio a cada arista. Si no, todos los pesos son iguales.
 
-### Procedimiento del Algoritmo Kruskal
+2. **Preparación de las Aristas:**
 
-1. Ordenar las aristas de forma ascendente según su peso.
-2. Inicializar un conjunto disjunto (**Union-Find**) para detectar ciclos.
-3. Recorrer las aristas en orden creciente:
-   - Si la arista conecta dos componentes diferentes (**no forma ciclo**), se incluye en el MST.
-   - Si forma un ciclo, se descarta.
-4. Termina cuando se han incluido $|V| - 1$ aristas.
+   * Se generan todas las aristas posibles entre casillas adyacentes.
+   * En el caso ponderado, se asigna un peso aleatorio a cada arista utilizando una semilla para garantizar reproducibilidad.
+   * Las aristas se ordenan por peso. En el caso no ponderado, se barajan aleatoriamente para aleatorizar la generación del laberinto.
 
-   Esto debido a que en un árbol con V vértices, exactamente V - 1 aristas son necesarias y suficientes para conectar todos los nodos sin formar ciclos. Agregar más aristas crearía ciclos; menos aristas dejaría el grafo desconectado.
+3. **Construcción del Laberinto:**
 
-### Formalización
+   * Se recorre la lista de aristas ordenadas.
+   * Se utiliza la estructura Union-Find para verificar si la inclusión de una arista formaría un ciclo. Si no forma ciclo, se incluye en el laberinto.
+   * Este proceso se repite hasta incluir $|V| - 1$ aristas, donde $|V|$ es el número de casillas del laberinto.
 
-Dado $E = \{e_1, e_2, ..., e_m\}$ ordenado tal que $w(e_1) \leq w(e_2) \leq \dots \leq w(e_m)$, se seleccionan las aristas $e_i$ que cumplan:
+4. **Finalización:**
+
+   * Al finalizar, el laberinto está completamente conectado y no posee ciclos, lo que garantiza la unicidad de los caminos entre casillas.
+
+## Formalización Matemática
+
+Dado un conjunto de aristas $E = {e\_1, e\_2, ..., e\_m}$ ordenado de forma no decreciente según su peso $w$, se construye el MST iterando sobre las aristas y aplicando la siguiente regla:
 
 $$
-\text{Si } e_i \text{ conecta componentes disjuntas } \Rightarrow \text{añadir a } T
+\text{Si } e_i \text{ conecta componentes disjuntas} \Rightarrow \text{añadir } e_i \text{ al MST}
 $$
 
-Se mantiene una estructura de conjuntos disjuntos $F$ tal que:
+Se utiliza una estructura de conjuntos disjuntos \$F\$ de forma que:
 
-- $F.find(u) \neq F.find(v) \Rightarrow F.union(u, v)$
+* Si $F.\text{find}(u) \neq F.\text{find}(v)$, se realiza la unión de los conjuntos:
+
+$$
+F.\text{union}(u, v)
+$$
+
+Este proceso se repite hasta que el MST contiene exactamente $|V| - 1$ aristas.
