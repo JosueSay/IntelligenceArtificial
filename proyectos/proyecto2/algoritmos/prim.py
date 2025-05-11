@@ -8,7 +8,7 @@ DEFAULT_ROWS = 50
 DEFAULT_COLS = 50
 DEFAULT_SEED_STRUCTURE = None  # Semilla para la generación de la estructura
 DEFAULT_SEED_WEIGHTS = None    # Semilla para la asignación de pesos
-ANIMATION_DELAY = 1        # segundos
+ANIMATION_DELAY = 0.005        # segundos
 WINDOW_SIZE = (1280, 720)
 BACKGROUND_COLOR = (55, 55, 55)
 PATH_COLOR = (255, 255, 255)
@@ -62,7 +62,6 @@ class PrimMazeGenerator:
         # inicio aleatorio de la casilla (vértices) del laberinto
         start_r, start_c = random.randint(0, self.rows - 1), random.randint(0, self.cols - 1)
         grid[2 * start_r + 1][2 * start_c + 1] = 0
-        
 
         frontier = []
         def addFrontier(r, c):
@@ -73,6 +72,8 @@ class PrimMazeGenerator:
                         frontier.append((nr, nc))
 
         addFrontier(start_r, start_c)
+        self.drawMaze(screen, grid, cellSize, offsetX, offsetY, frontier)
+        time.sleep(ANIMATION_DELAY)
 
         while frontier:
             for event in pygame.event.get():
