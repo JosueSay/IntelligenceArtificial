@@ -165,19 +165,22 @@ def dfs(maze, start, end):
 
 def a_star(maze, start, end):
     def heuristic(a, b):
-        return abs(a[0]-b[0]) + abs(a[1]-b[1])
+        return abs(a[0]-b[0]) + abs(a[1]-b[1]) # Manhattan 
     
     rows, cols = maze.shape
     heap = [(0, start)]
     g_score = {start: 0}
     parent = {start: None}
     visited_order = []
+    closed_set = set()  
     
     while heap:
         current = heapq.heappop(heap)[1]
-        if current in visited_order:
+        
+        if current in closed_set: 
             continue
             
+        closed_set.add(current)   
         visited_order.append(current)
         
         if current == end:
@@ -186,12 +189,13 @@ def a_star(maze, start, end):
         for dr, dc in [(0,1), (1,0), (0,-1), (-1,0)]:
             nr, nc = current[0]+dr, current[1]+dc
             if 0 <= nr < rows and 0 <= nc < cols and maze[nr, nc] == 0:
-                new_g = g_score[current] + 1
-                if (nr, nc) not in g_score or new_g < g_score[(nr, nc)]:
-                    g_score[(nr, nc)] = new_g
-                    heapq.heappush(heap, (new_g + heuristic(end, (nr, nc)), (nr, nc)))
+                tentative_g = g_score[current] + 1
+                
+                if (nr, nc) not in g_score or tentative_g < g_score[(nr, nc)]:
+                    g_score[(nr, nc)] = tentative_g
+                    f_score = tentative_g + heuristic(end, (nr, nc))
+                    heapq.heappush(heap, (f_score, (nr, nc)))
                     parent[(nr, nc)] = current
-    
     path = []
     current = end
     while current in parent:
@@ -321,6 +325,7 @@ def generate_valid_positions(maze, min_distance=10):
         if abs(start[0] - end[0]) + abs(start[1] - end[1]) >= min_distance:
             return start, end
 
+
 def run_multiple_simulations(num_simulations=25):
     stats = {
         "BFS": {"time": [], "nodes": [], "length": []},
@@ -336,28 +341,114 @@ def run_multiple_simulations(num_simulations=25):
         "A*": a_star
     }
     
+    # Ejecutar todas las simulaciones en modo rápido
     for sim in range(num_simulations):
         print(f"\nSimulación {sim+1}/{num_simulations}")
         maze = generate_maze(ROWS, COLS)
         start, end = generate_valid_positions(maze)
         
-        # Solo mostrar gráficos en la primera simulación
-        if sim == 24:
-            print("Mostrando visualización de la primera simulación...")
-            visualize_algorithms(maze, start, end)  # Versión gráfica lenta
-            # Recoger datos de la simulación visualizada
-            for alg_name in algorithms:
-                result = run_algorithm(maze, start, end, algorithms[alg_name])
-                stats[alg_name]["time"].append(result["time"])
-                stats[alg_name]["nodes"].append(result["nodes"])
-                stats[alg_name]["length"].append(result["length"])
-        else:
-            # Ejecución rápida para las demás simulaciones
-            for alg_name, algorithm in algorithms.items():
-                result = run_algorithm(maze, start, end, algorithm)
-                stats[alg_name]["time"].append(result["time"])
-                stats[alg_name]["nodes"].append(result["nodes"])
-                stats[alg_name]["length"].append(result["length"])
-                print(f"{alg_name}: {result['time']:.4f}s | Nodos: {result['nodes']} | Long: {result['length']}")
+        for alg_name, algorithm in algorithms.items():
+            result = run_algorithm(maze, start, end, algorithm)
+            stats[alg_name]["time"].append(result["time"])
+            stats[alg_name]["nodes"].append(result["nodes"])
+            stats[alg_name]["length"].append(result["length"])
+            print(f"{alg_name}: {result['time']:.4f}s | Nodos: {result['nodes']} | Long: {result['length']}")
+    
+    # Generar nueva simulación para visualización (no incluida en stats)
+    print("\nGenerando simulación de demostración...")
+    maze = generate_maze(ROWS, COLS)
+    start, end = generate_valid_positions(maze)
+    visualize_single_simulation(maze, start, end, algorithms)
+    
+    # Calcular y mostrar estadísticas finales
+    print("\n=== ESTADÍSTICAS FINALES (25 simulaciones) ===")
+    print(f"{'Algoritmo':<6} | {'Tiempo Prom':<10} | {'Nodos Prom':<12} | {'Longitud Prom':<12} | Ranking")
+    print("-"*65)
+    
+    avg_stats = {}
+    for alg, data in stats.items():
+        avg_stats[alg] = {
+            "time": np.mean(data["time"]),
+            "nodes": np.mean(data["nodes"]),
+            "length": np.mean(data["length"])
+        }
+    
+    sorted_by_time = sorted(avg_stats.items(), key=lambda x: x[1]["time"])
+    
+    for rank, (alg, data) in enumerate(sorted_by_time, 1):
+        print(f"{alg:<6} | {data['time']:<10.4f} | {data['nodes']:<12.1f} | {data['length']:<12.1f} | #{rank}")
+
+def visualize_single_simulation(maze, start, end, algorithms):
+    """Visualiza una simulación mostrando cada algoritmo secuencialmente"""
+    results = {}
+    
+    # Calcular resultados primero
+    for alg_name, algorithm in algorithms.items():
+        results[alg_name] = run_algorithm(maze, start, end, algorithm)
+    
+    # Mostrar cada algoritmo individualmente
+    for alg_name in ["BFS", "DFS", "UCS", "A*"]:
+        result = results[alg_name]
+        color = COLORS[alg_name]
+        
+        current_step = 0
+        path_step = 0
+        completed = False
+        
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+            
+            # Dibujar laberinto base
+            screen.fill(BLACK)
+            for r in range(ROWS):
+                for c in range(COLS):
+                    if maze[r, c] == 0:
+                        pygame.draw.rect(screen, WHITE, (c*CELL_SIZE, r*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar nodos visitados
+            if current_step < len(result['visited']):
+                nodes = result['visited'][:current_step+1]
+                current_step += 5
+            else:
+                nodes = result['visited']
+                completed = True
+            
+            for node in nodes:
+                pygame.draw.rect(screen, color, (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar camino
+            if completed and result['path']:
+                if path_step < len(result['path']):
+                    path_nodes = result['path'][:path_step+1]
+                    path_step += 2
+                else:
+                    path_nodes = result['path']
+                
+                for node in path_nodes:
+                    pygame.draw.rect(screen, ORANGE, (node[1]*CELL_SIZE, node[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Dibujar inicio y fin
+            pygame.draw.rect(screen, GREEN, (start[1]*CELL_SIZE, start[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            pygame.draw.rect(screen, RED, (end[1]*CELL_SIZE, end[0]*CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
+            # Mostrar info
+            text = font.render(f"{alg_name} - Tiempo: {result['time']:.2f}s | Nodos: {result['nodes']}", True, color)
+            screen.blit(text, (10, 10))
+            
+            pygame.display.flip()
+            clock.tick(30)
+            
+            if completed and path_step >= len(result['path']):
+                time.sleep(2)
+                running = False
+        
+        # Limpiar pantalla entre algoritmos
+        screen.fill(BLACK)
+        pygame.display.flip()
+        time.sleep(1)
 
 run_multiple_simulations(25)
