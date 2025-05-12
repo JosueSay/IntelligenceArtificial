@@ -207,3 +207,116 @@ class PrimMazeGenerator:
                     running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     running = False
+
+
+    def generateWithNograph(self):
+        """
+        Genera un laberinto sin visualización gráfica y lo devuelve como un objeto Maze.
+        """
+        print("\n=== Generando Laberinto Sin Visualización ===")
+        print(f"Tipo de Laberinto: {'Ponderado' if self.weighted else 'No Ponderado'}")
+        print("Algoritmo de Generación: Prim")
+        print(f"Dimensiones: {self.rows}x{self.cols}")
+        print("==============================================\n")
+    
+        if self.seed_structure is not None:
+            random.seed(self.seed_structure)
+    
+        grid = [[1 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+        weights_grid = [[0 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+    
+        start_r, start_c = random.randint(0, self.rows - 1), random.randint(0, self.cols - 1)
+        grid[2 * start_r + 1][2 * start_c + 1] = 0
+    
+        frontier = []
+        visited = set([(start_r, start_c)])
+    
+        if self.weighted and self.seed_weights is not None:
+            random.seed(self.seed_weights)
+        
+        def addFrontier(r, c):
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < self.rows and 0 <= nc < self.cols and grid[2 * nr + 1][2 * nc + 1] == 1:
+                    if self.weighted:
+                        weight = random.randint(1, 10)
+                    else:
+                        weight = 1
+                    heapq.heappush(frontier, (weight, nr, nc))
+    
+    # Añadir vecinos de la celda inicial a la frontera
+        addFrontier(start_r, start_c)
+    
+    # Proceso principal del algoritmo de Prim
+        while frontier:
+        # Seleccionar siguiente celda de la frontera
+            if self.weighted:
+            # En laberinto ponderado, seleccionar la de menor peso
+                weight, r, c = heapq.heappop(frontier)
+            else:
+            # En laberinto no ponderado, seleccionar aleatoriamente
+                idx = random.randint(0, len(frontier) - 1)
+                weight, r, c = frontier.pop(idx)
+        
+        # Si ya visitamos esta celda, continuar con la siguiente
+            if (r, c) in visited:
+                continue
+        
+        # Buscar vecinos ya visitados
+            neighbors = []
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < self.rows and 0 <= nc < self.cols and (nr, nc) in visited:
+                    neighbors.append((nr, nc))
+        
+        # Si hay vecinos ya visitados, conectar con uno de ellos
+            if neighbors:
+                if self.weighted:
+                # Elegir vecino con menor peso en caso de laberinto ponderado
+                    min_weight = float('inf')
+                    selected_neighbor = None
+                    for nr, nc in neighbors:
+                        wallR = r + nr + 1
+                        wallC = c + nc + 1
+                        current_weight = weights_grid[wallR][wallC]
+                        if current_weight < min_weight:
+                            min_weight = current_weight
+                            selected_neighbor = (nr, nc)
+                
+                    if selected_neighbor:
+                        nr, nc = selected_neighbor
+                    else:
+                        nr, nc = random.choice(neighbors)
+                else:
+                # Elegir vecino aleatorio en caso de laberinto no ponderado
+                    nr, nc = random.choice(neighbors)
+            
+            # Abrir camino entre celdas
+                wallR = r + nr + 1
+                wallC = c + nc + 1
+                grid[2 * r + 1][2 * c + 1] = 0  # Marcar celda actual como camino
+                grid[wallR][wallC] = 0  # Marcar pared entre celdas como camino
+            
+            # Asignar peso al camino si es ponderado
+                if self.weighted:
+                    weights_grid[wallR][wallC] = weight
+            
+            # Añadir vecinos de la celda actual a la frontera
+                addFrontier(r, c)
+        
+        # Marcar celda como visitada
+            visited.add((r, c))
+    
+    # Asegurar que las celdas de entrada y salida son transitables
+        grid[1][1] = 0  # Entrada (0,0)
+        grid[2 * self.rows - 1][2 * self.cols - 1] = 0  # Salida (rows-1, cols-1)
+    
+    # Crear y configurar el objeto Maze
+        maze = Maze()
+        maze.setGrid(grid)
+    
+        if self.weighted:
+            maze.setWeights(weights_grid)
+    
+        print("Laberinto generado con éxito.")
+        return maze
