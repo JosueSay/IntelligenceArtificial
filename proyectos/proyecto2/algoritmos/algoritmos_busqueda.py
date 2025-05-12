@@ -4,37 +4,61 @@ from queue import Queue
 import heapq
 
 # Algoritmo bfs para recorrer el laberinto
-def bfs(maze, start, end):
-    rows, cols = maze.shape
+def bfs(maze_obj, start, end):
+    """Algoritmo BFS para encontrar el camino más corto en un laberinto."""
+    # Obtener dimensiones del laberinto
+    rows = len(maze_obj.grid)
+    cols = len(maze_obj.grid[0]) if rows > 0 else 0
+    
+    # Inicializar estructuras
     queue = Queue()
     queue.put(start)
     visited = set([start])
     parent = {start: None}
     nodes_explored = 0
-    # Mientras no se haya terminado el laberinto
+    visited_order = []  # Para visualización
+    
+    print(f"Buscando ruta desde {start} hasta {end}...")
+    
+    # Proceso principal BFS
     while not queue.empty():
         current = queue.get()
         nodes_explored += 1
+        visited_order.append(current)
+        
+        # Verificar si llegamos al destino
         if current == end:
+            print(f"¡Destino encontrado! Nodos explorados: {nodes_explored}")
             break
-        # Ahora a explorar los vecinos
-        for dr, dc in [(0,1), (1,0), (0,-1), (-1,0)]:
+            
+        # Explorar vecinos (arriba, derecha, abajo, izquierda)
+        for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
             new_r, new_c = current[0] + dr, current[1] + dc
-            # Verificar si el camino esta libre 
-            if (0 <= new_r < rows and 0 <= new_c < cols and maze[new_r, new_c] == 0 and (new_r, new_c) not in visited):
+            
+            # Verificar si el vecino es válido
+            if (0 <= new_r < rows and 0 <= new_c < cols and 
+                maze_obj.grid[new_r][new_c] == 0 and 
+                (new_r, new_c) not in visited):
+                
                 neighbor = (new_r, new_c)
                 queue.put(neighbor)
                 visited.add(neighbor)
                 parent[neighbor] = current
     
+    # Reconstruir el camino
     path = []
     current = end
+    
     if end in parent:
         while current:
             path.append(current)
             current = parent[current]
         path.reverse()
-    return path, nodes_explored, visited
+        print(f"Camino encontrado con longitud {len(path)}")
+    else:
+        print("No se pudo encontrar un camino hasta el destino")
+    
+    return path, nodes_explored, visited_order
 
 def dfs(maze, start, end):
     rows, cols = maze.shape
