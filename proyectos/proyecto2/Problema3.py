@@ -308,9 +308,56 @@ def visualize_algorithms(maze, start, end):
     for name, data in sorted_results:
         print(f"{name:<10} | {data['time']:<10.4f} | {data['nodes']:<15} | {data['length']:<15}")
 
-# Ejecutar comparación
-maze = generate_maze(ROWS, COLS)
-start = (0, 0)
-end = (ROWS-1, COLS-1)
+def generate_valid_positions(maze, min_distance=10):
+    """Genera posiciones inicial y final válidas en caminos libres con distancia mínima"""
+    rows, cols = maze.shape
+    free_cells = [(r, c) for r in range(rows) for c in range(cols) if maze[r, c] == 0]
+    
+    while True:
+        start = tuple(free_cells[np.random.randint(len(free_cells))])
+        end = tuple(free_cells[np.random.randint(len(free_cells))])
+        
+        # Calcular distancia Manhattan
+        if abs(start[0] - end[0]) + abs(start[1] - end[1]) >= min_distance:
+            return start, end
 
-visualize_algorithms(maze, start, end)
+def run_multiple_simulations(num_simulations=25):
+    stats = {
+        "BFS": {"time": [], "nodes": [], "length": []},
+        "DFS": {"time": [], "nodes": [], "length": []},
+        "UCS": {"time": [], "nodes": [], "length": []},
+        "A*": {"time": [], "nodes": [], "length": []}
+    }
+    
+    algorithms = {
+        "BFS": bfs,
+        "DFS": dfs,
+        "UCS": uniform_cost_search,
+        "A*": a_star
+    }
+    
+    for sim in range(num_simulations):
+        print(f"\nSimulación {sim+1}/{num_simulations}")
+        maze = generate_maze(ROWS, COLS)
+        start, end = generate_valid_positions(maze)
+        
+        # Solo mostrar gráficos en la primera simulación
+        if sim == 24:
+            print("Mostrando visualización de la primera simulación...")
+            visualize_algorithms(maze, start, end)  # Versión gráfica lenta
+            # Recoger datos de la simulación visualizada
+            for alg_name in algorithms:
+                result = run_algorithm(maze, start, end, algorithms[alg_name])
+                stats[alg_name]["time"].append(result["time"])
+                stats[alg_name]["nodes"].append(result["nodes"])
+                stats[alg_name]["length"].append(result["length"])
+        else:
+            # Ejecución rápida para las demás simulaciones
+            for alg_name, algorithm in algorithms.items():
+                result = run_algorithm(maze, start, end, algorithm)
+                stats[alg_name]["time"].append(result["time"])
+                stats[alg_name]["nodes"].append(result["nodes"])
+                stats[alg_name]["length"].append(result["length"])
+                print(f"{alg_name}: {result['time']:.4f}s | Nodos: {result['nodes']} | Long: {result['length']}")
+
+run_multiple_simulations(25)
