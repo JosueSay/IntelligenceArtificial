@@ -181,3 +181,70 @@ class KruskalMazeGenerator:
                     running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     running = False
+
+    def generateWithNograph(self):
+        """
+        Genera un laberinto sin visualización gráfica y lo devuelve como un objeto Maze.
+        """
+        print("\n=== Generando Laberinto Sin Visualización ===")
+        print(f"Tipo de Laberinto: {'Ponderado' if self.weighted else 'No Ponderado'}")
+        print("Algoritmo de Generación: Kruskal")
+        print(f"Dimensiones: {self.rows}x{self.cols}")
+        print("==============================================\n")
+    
+    # Establecer la semilla para reproducibilidad
+        random.seed(self.seed_structure)
+    
+    # Inicializar el grid y los pesos
+        grid = [[1 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+        weights_grid = [[0 for _ in range(2 * self.cols + 1)] for _ in range(2 * self.rows + 1)]
+        uf = UnionFind(self.rows * self.cols)
+    
+    # Generar todas las posibles aristas
+        edges = [((r, c), (r, c + 1)) for r in range(self.rows) for c in range(self.cols - 1)] + \
+            [((r, c), (r + 1, c)) for r in range(self.rows - 1) for c in range(self.cols)]
+    
+    # Preparar aristas con pesos
+        if self.weighted:
+            random.seed(self.seed_weights)
+            edges_with_weights = []
+            for edge in edges:
+                weight = random.randint(1, 10)
+                edges_with_weights.append((weight, edge))
+            edges_with_weights.sort(key=lambda x: x[0])
+        else:
+            random.shuffle(edges)
+            edges_with_weights = [(1, edge) for edge in edges]
+    
+    # Aplicar el algoritmo de Kruskal
+        for weight, (r1, c1), (r2, c2) in [(w, *e) for w, e in edges_with_weights]:
+        # Conversion a índices 1D para UnionFind
+            idx1 = r1 * self.cols + c1
+            idx2 = r2 * self.cols + c2
+        
+        # Si podemos unir estas celdas sin formar ciclos
+            if uf.union(idx1, idx2):
+            # Abrir camino entre las celdas
+                grid[2 * r1 + 1][2 * c1 + 1] = 0  # Celda 1
+                grid[2 * r2 + 1][2 * c2 + 1] = 0  # Celda 2
+                grid[r1 + r2 + 1][c1 + c2 + 1] = 0  # Pared entre celdas
+            
+            # Asignar peso si es ponderado
+                if self.weighted:
+                    weights_grid[r1 + r2 + 1][c1 + c2 + 1] = weight
+    
+    # Asegurar que las celdas de entrada y salida son transitables
+        grid[1][1] = 0  # Entrada (0,0)
+        grid[2 * self.rows - 1][2 * self.cols - 1] = 0  # Salida (rows-1, cols-1)
+    
+    # Crear y configurar el objeto Maze
+        maze = Maze()
+        maze.setGrid(grid)
+    
+        if self.weighted:
+            maze.setWeights(weights_grid)
+    
+        print("Laberinto generado con éxito.")
+        return maze
+    
+
