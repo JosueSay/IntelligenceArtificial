@@ -360,10 +360,9 @@ def run_multiple_simulations(num_simulations=25):
     start, end = generate_valid_positions(maze)
     visualize_single_simulation(maze, start, end, algorithms)
     
-    # Calcular y mostrar estadísticas finales
     print("\n=== ESTADÍSTICAS FINALES (25 simulaciones) ===")
-    print(f"{'Algoritmo':<6} | {'Tiempo Prom':<10} | {'Nodos Prom':<12} | {'Longitud Prom':<12} | Ranking")
-    print("-"*65)
+    print(f"{'Algoritmo':<6} | {'Tiempo Prom':<10} | {'Nodos Prom':<12} | {'Longitud Prom':<12} | Ranking (T+N)")
+    print("-"*75)
     
     avg_stats = {}
     for alg, data in stats.items():
@@ -373,10 +372,26 @@ def run_multiple_simulations(num_simulations=25):
             "length": np.mean(data["length"])
         }
     
-    sorted_by_time = sorted(avg_stats.items(), key=lambda x: x[1]["time"])
+    # Calcular rankings individuales
+    sorted_time = sorted(avg_stats.items(), key=lambda x: x[1]["time"])
+    time_ranks = {alg: i+1 for i, (alg, _) in enumerate(sorted_time)}
     
-    for rank, (alg, data) in enumerate(sorted_by_time, 1):
-        print(f"{alg:<6} | {data['time']:<10.4f} | {data['nodes']:<12.1f} | {data['length']:<12.1f} | #{rank}")
+    sorted_nodes = sorted(avg_stats.items(), key=lambda x: x[1]["nodes"])
+    node_ranks = {alg: i+1 for i, (alg, _) in enumerate(sorted_nodes)}
+    
+    # Calcular ranking combinado
+    combined_ranks = []
+    for alg in avg_stats:
+        combined = (time_ranks[alg] + node_ranks[alg]) / 2
+        combined_ranks.append((combined, time_ranks[alg], node_ranks[alg], alg))
+    
+    # Ordenar por ranking combinado
+    combined_ranks.sort(key=lambda x: (x[0], x[1], x[2]))
+    
+    # Mostrar resultados
+    for rank, (comb, t_rank, n_rank, alg) in enumerate(combined_ranks, 1):
+        data = avg_stats[alg]
+        print(f"{alg:<6} | {data['time']:<10.4f} | {data['nodes']:<12.1f} | {data['length']:<12.1f} | #{rank} (T:{t_rank}, N:{n_rank})")
 
 def visualize_single_simulation(maze, start, end, algorithms):
     """Visualiza una simulación mostrando cada algoritmo secuencialmente"""
