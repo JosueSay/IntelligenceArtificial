@@ -38,7 +38,7 @@ El algoritmo de Kruskal es un método **greedy** utilizado para encontrar el Ár
 
 ## Formalización Matemática
 
-Dado un conjunto de aristas $E = {e\_1, e\_2, ..., e\_m}$ ordenado de forma no decreciente según su peso $w$, se construye el MST iterando sobre las aristas y aplicando la siguiente regla:
+Dado un conjunto de aristas $E = {e_1, e_2, ..., e_m}$ ordenado de forma no decreciente según su peso $w$, se construye el MST iterando sobre las aristas y aplicando la siguiente regla:
 
 $$
 \text{Si } e_i \text{ conecta componentes disjuntas} \Rightarrow \text{añadir } e_i \text{ al MST}

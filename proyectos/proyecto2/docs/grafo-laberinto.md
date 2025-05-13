@@ -50,7 +50,7 @@ El laberinto se representa con un **grid de tamaño** $(2 \cdot \text{filas} + 1
   \text{Fila}_{\text{camino}} = r_1 + r_2 + 1, \quad \text{Columna}_{\text{camino}} = c_1 + c_2 + 1
   $$
 
-  donde $(r\_1, c\_1)$ y $(r\_2, c\_2)$ son las posiciones de las dos casillas adyacentes.
+  donde $(r_1, c_1)$ y $(r_2, c_2)$ son las posiciones de las dos casillas adyacentes.
 
 ## Conversión de Coordenadas 2D a 1D
 
