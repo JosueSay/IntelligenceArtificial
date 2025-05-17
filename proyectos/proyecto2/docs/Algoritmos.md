@@ -69,6 +69,13 @@ A* es un algoritmo de búsqueda informada que combina UCS con una heurística pa
 
 ### Solución de un tablero 60x80 usando BFS
 
+Luego de implementar lo algoritmos, se generó un laberinto de tamaño relativamente grande (60 x 80) y se decidió utilizar el algoritmo BFS para resolverlo. En promedio, estos fueron los resultados obtenidos utilizando un laberinto generado con Kruskal y con pesos: 
+
+| Nodos explorados | Longitud camino |
+|------------------|-----------------|
+| 9000             | 400             |
+
+En la mayoría de casos, el algoritmo revisaba la mayoría de los nodos para encontrar el camino hacia la salida. 
 
 
 ### Resultados de Algoritmos de Búsqueda en Laberinto
