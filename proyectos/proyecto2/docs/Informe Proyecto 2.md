@@ -22,7 +22,7 @@ Una vez instalado todo, se ejecutar los archivos del `interfaz.py`, `Problema2.p
    ```
 
 
-# Equivalencia Grafo-Laberinto
+## Equivalencia Grafo-Laberinto
 
 En el contexto de laberintos, el algoritmo permite generar en los que existe **un único camino entre cualquier par de casillas**, sin ciclos y completamente conectados siguiendo un algoritmo greedy para formar un **Árbol de expansión mínima (MST)**.
 
@@ -32,7 +32,7 @@ En el contexto de laberintos, el algoritmo permite generar en los que existe **u
 * Las **aristas seleccionadas** durante la ejecución del algoritmo forman los **caminos transitables** del laberinto.
 * Las **aristas no seleccionadas** definen las **paredes** del laberinto.
 
-## Conceptos Clave
+### Conceptos Clave
 
 * **Árbol de Expansión Mínima (MST):**
   Subconjunto de aristas del grafo que conecta todos los nodos (casillas) minimizando el costo total y sin formar ciclos.
@@ -43,7 +43,7 @@ En el contexto de laberintos, el algoritmo permite generar en los que existe **u
     Este peso influye en la estructura del laberinto, priorizando la creación de caminos con menor costo.
   * Si el laberinto es **no ponderado**, todas las conexiones tienen el mismo peso, lo que produce laberintos más balanceados y simétricos.
 
-## Estructura del Grid y Ponderación
+### Estructura del Grid y Ponderación
 
 * En el **grid** del laberinto:
   * Un valor de **1** indica una **pared** (celda no transitable).
@@ -54,7 +54,7 @@ En el contexto de laberintos, el algoritmo permite generar en los que existe **u
 * En laberintos **no ponderados**:
   * Todas las celdas transitables tienen un peso implícito de **1**.
 
-## Conversión de Coordenadas en el Grid
+### Conversión de Coordenadas en el Grid
 
 El laberinto se representa con un **grid de tamaño** $(2 \cdot \text{filas} + 1) \times (2 \cdot \text{columnas} + 1)$ para intercalar muros entre celdas transitables:
 
@@ -76,7 +76,7 @@ El laberinto se representa con un **grid de tamaño** $(2 \cdot \text{filas} + 1
 
   donde $(r_1, c_1)$ y $(r_2, c_2)$ son las posiciones de las dos casillas adyacentes.
 
-## Conversión de Coordenadas 2D a 1D
+### Conversión de Coordenadas 2D a 1D
 
 Para optimizar las búsquedas y gestionar la estructura de componentes conectados (Union-Find), se realiza la conversión de coordenadas 2D a un índice 1D de la siguiente forma:
 
@@ -86,5 +86,4 @@ $$
 
 Esto permite manejar las casillas de forma eficiente como un arreglo lineal.
 
-## Resumen de Estados de las Celdas
 
