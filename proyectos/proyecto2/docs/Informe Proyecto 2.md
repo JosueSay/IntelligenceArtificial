@@ -193,9 +193,7 @@ El algoritmo de Prim sigue estos pasos:
    * Agregar $u$ al MST.
    * Para cada vecino $v$ de $u$, si $v$ no está en el MST y $(u, v)$ es una arista válida:
 
-     $$
-     key[v] = \min(key[v], w(u, v))
-     $$
+     $$key[v] = \min(key[v], w(u, v))$$
 
 ## Resolución de laberintos usando algoritmos de búsqueda
 
