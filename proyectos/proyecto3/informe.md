@@ -1,78 +1,133 @@
-# Informe Técnico: IA para Jugar Othello con Heurística Mejorada y Poda Alfa-Beta
+<!-- ---
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{amssymb}
+  - \usepackage{fontspec}
+  - \setmainfont{FiraCode Nerd Font}
+  - \usepackage{setspace}
+  - \setstretch{1.5}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+  - \hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+geometry: top=0.67in, bottom=0.67in, left=0.85in, right=0.85in
+--- -->
 
-Este informe describe el diseño e implementación de un agente de inteligencia artificial para el juego Othello. El sistema utiliza un algoritmo de búsqueda adversaria con heurística enriquecida, poda alfa-beta, un libro de aperturas, control del tiempo y adaptación a las fases del juego. Se explica cada componente del código con su razonamiento, fundamentos teóricos y referencias.
+# Informe Técnico: IA para Jugar Othello con Heurística, Poda Alfa-Beta y Gestión Adaptativa
+
+El sistema utiliza un algoritmo de búsqueda adversaria con múltiples técnica:
+
+* **Heurística**: evalúa esquinas, movilidad, X-squares y C-squares.
+* **Poda alfa-beta con ordenación de jugadas**: mejora la eficiencia de la búsqueda adversaria.
+* **Profundidad de búsqueda adaptativa**: se ajusta según el número de huecos y fase del juego.
+* **Barrido completo** (exhaustivo) cuando hay menos o igual a 12 casillas vacías.
+* **Libros de apertura diferenciados por color**: permite jugadas sólidas al inicio según el jugador.
+* **Control de tiempo (time-out)**: asegura respuesta dentro del límite asignado; aplica jugada aleatoria como respaldo.
 
 ## Pseudocódigo General del Agente
 
-1. Si no hay movimientos válidos, retorna None.
-2. Si está en apertura, intenta aplicar el libro.
-3. Si hay ≤12 casillas vacías, realiza barrido completo.
-4. Si no, decide la profundidad según el momento.
-5. Usa minimax con poda alfa-beta.
-6. Si todo falla, elige jugada aleatoria.
+1. Si no hay movimientos válidos, retorna `None`.
+2. Si está en apertura y hay coincidencia en el libro correspondiente, aplica la jugada sugerida.
+3. Si hay (<=12) casillas vacías, se realiza un barrido exacto con profundidad igual al número de huecos.
+4. En otro caso, la profundidad se adapta según el número de jugadas válidas (más profundidad si hay pocas jugadas).
+5. Se ejecuta Minimax con poda alfa-beta y ordenación de jugadas.
+6. Si ocurre un *timeout* o error, se elige una jugada aleatoria válida como respaldo.
 
-```bash
+```python
 function ai_move(board, player):
-    if no hay movimientos válidos:
+    if no hay jugadas válidas:
         return None
 
-    if en apertura y se reconoce el patrón:
+    if es apertura y hay coincidencia en libro:
         return jugada del libro
 
-    if en medio juego:
-        usar minimax con poda alfa-beta a profundidad media
+    if huecos <= SWEEP_LIMIT:
+        depth = huecos  # barrido completo
+    else:
+        depth = MID_DEPTH si muchas jugadas, END_DEPTH si pocas
 
-    if en final:
-        usar minimax con poda alfa-beta a profundidad mayor
-        si ≤ 12 huecos, barrido completo
+    ejecutar minimax con poda alfa-beta
 
-    if no hay jugada clara:
-        elegir movimiento aleatorio
+    si no se encuentra jugada (por timeout):
+        elegir jugada aleatoria
 
-    return mejor movimiento encontrado
+    return mejor jugada encontrada
 ```
 
 ## Parámetros Generales
 
 ```python
-TIME_LIMIT  = 3.0
-MID_DEPTH   = 3
-END_DEPTH   = 5
-SWEEP_LIMIT = 12
+TIME_LIMIT  = 3.0           # segundos máximos de cómputo por jugada
+MID_DEPTH   = 3             # profundidad típica en apertura y medio juego
+END_DEPTH   = 5             # profundidad más alta en fases de cierre
+SWEEP_LIMIT = 12            # umbral para realizar barrido exacto
+INF         = float("inf")  # valor infinito simbólico
 ```
 
-### Razonamiento
+### Justificación
 
-Se ajusta el tiempo de cómputo y profundidad de análisis dependiendo del momento del juego. Esto permite un equilibrio entre rendimiento y precisión.
+* **`TIME_LIMIT`**: garantiza que la IA responda siempre dentro del tiempo permitido.
+* **`SWEEP_LIMIT`**: al llegar al 12 huecos (o menos), se permite jugar sin usar heurística.
+* **Profundidad adaptativa**: más jugadas válidas implican menos profundidad (mayor ramificación); menos jugadas válidas permite mayor profundidad.
 
-## Libro de Aperturas
+## Libro de Aperturas Diferenciado por Color
 
 ```python
-OPENING_BOOK = {
+OPENING_BOOK_WHITE = {
     ((2, 3), (2, 2)): (3, 2),
     ((2, 3), (3, 2)): (2, 4),
     ((2, 3), (2, 4)): (3, 2),
 }
+
+OPENING_BOOK_BLACK = {
+    ((5, 4), (5, 5)): (4, 5),
+    ((5, 4), (4, 5)): (5, 3),
+    ((5, 4), (5, 3)): (4, 5),
+}
 ```
 
-Estas jugadas representan respuestas óptimas ante ciertas configuraciones iniciales, según principios estratégicos del juego Othello.
+El agente IA implementa un **libro de aperturas específico para cada color**. Esto permite un mejor inicio y estratégicamente diferenciado para blancas y negras, respetando las mejores prácticas de apertura en Othello.
 
-Las coordenadas representan las primeras jugadas de un jugador luego de la posición estándar inicial. Las aperturas seleccionadas tienen como objetivo:
+Los libros de apertura están diseñados para actuar si el agente detecta que se encuentra en uno de los primeros turnos y las dos primeras jugadas coinciden con una de las secuencias predefinidas. Si eso ocurre, se responde con una jugada óptima sin necesidad de buscar.
 
-1. **Evitar entregar el control de las esquinas**: Las esquinas son las posiciones más valiosas del tablero porque no pueden ser capturadas una vez tomadas.
-2. **Controlar el centro y preparar ataques diagonales**: Los movimientos (3,2) o (2,4) aseguran que el jugador mantenga acceso al centro sin exponerse a ataques tempranos.
-3. **Evitar configuraciones de "X-square" tempranas**: Estas jugadas previenen que el oponente tenga oportunidades de capturar esquinas colocando fichas en X-squares (diagonal inmediata a una esquina), que son peligrosas si se toman demasiado pronto.
+1. **Evitar regalar esquinas en turnos tempranos**
+   Las esquinas son posiciones definitivas: una vez tomadas, no pueden perderse. Es vital no permitir que el rival acceda a ellas mediante jugadas precipitadas.
+
+2. **Controlar el centro y mantener flexibilidad**
+   Las aperturas propuestas dan al jugador influencia en el tablero sin crear puntos débiles inmediatos.
+
+3. **Prevenir ocupación prematura de X-squares o C-squares**
+   Estas casillas son peligrosas si no están respaldadas, ya que facilitan que el oponente tome esquinas más adelante.
 
 ### ¿Qué significan estas jugadas?
 
+#### Blancas (`OPENING_BOOK_WHITE`)
+
 * `((2, 3), (2, 2)) → (3, 2)`
-  Esta secuencia forma un patrón de apertura diagonal paralela. Al jugar (3,2) se evita ceder la esquina inferior izquierda y se extiende el control hacia el centro sin comprometer la estabilidad de los bordes.
+
+  * Apertura de tipo **diagonal paralela**.
+  * Prioriza el control interior evitando vulnerabilidad en la esquina superior izquierda.
 
 * `((2, 3), (3, 2)) → (2, 4)`
-  Movimiento perpendicular que sigue controlando el centro, buscando expandirse lateralmente sin empujar al oponente hacia los bordes.
+
+  * Jugada **perpendicular**, busca expansión lateral con buena defensa del borde.
 
 * `((2, 3), (2, 4)) → (3, 2)`
-  Una versión desplazada del patrón anterior, mantiene el control diagonal y evita regalar posiciones externas vulnerables.
+
+  * Variante desplazada que equilibra control central y defensa de flancos.
+
+#### Negras (`OPENING_BOOK_BLACK`)
+
+* `((5, 4), (5, 5)) → (4, 5)`
+
+  * Jugada simétrica respecto a las blancas; se replica el patrón de control seguro.
+
+* `((5, 4), (4, 5)) → (5, 3)`
+
+  * Variante que prioriza lateralidad sin arriesgar esquinas.
+
+* `((5, 4), (5, 3)) → (4, 5)`
+
+  * Opción que mantiene la diagonal interna fuerte sin comprometer casillas peligrosas.
 
 Estas jugadas fueron seleccionadas siguiendo los patrones estratégicos presentados en la **[Estrategia Reversista y Visualización de Aperturas](https://othellobrasil.weebly.com/uploads/7/6/8/2/76824037/lea_tosti_-_estrategia_reversista_y_visualizaci%C3%B3n_de_aperturas_de_reversi.pdf)**, donde se menciona la importancia de mantener un control en los primeros turnos y de no apresurarse a capturar esquinas ni bordes, que pueden volverse en contra si no están estabilizados correctamente.
 
@@ -173,9 +228,7 @@ def apply_move(b, move, p):
 
 La **función de transición de estados** se define formalmente como:
 
-```math
-f: S × A → S
-```
+$$f: S \times A \rightarrow S$$
 
 Esto significa que, dado un **estado** `S` (el tablero actual) y una **acción** `A` (una jugada válida), se obtiene un **nuevo estado** `S'` (tablero actualizado tras aplicar la jugada).
 
@@ -245,20 +298,93 @@ def order_moves(moves):
     # Prioriza: esquinas > normales > X-squares
 ```
 
-### ¿Por qué?
+Esta función organiza las jugadas válidas según su valor estratégico antes de ser evaluadas por el algoritmo de búsqueda. La ordenación permite que el algoritmo explore primero las mejores jugadas, lo que incrementa la eficiencia de la poda y mejora la calidad de las decisiones en menos tiempo con el fin de reducir el espacio de búsqueda efectivo, priorizar posiciones más valiosas y evitar errores de elección de jugadas del tablero usando la siguiente lógica:
 
-Las esquinas son estratégicamente valiosas, y priorizarlas mejora la poda alfa-beta. Así se evalúan primero las mejores jugadas, permitiendo cortar ramas más rápido.
+1. **Esquinas (`CORNERS`) → prioridad máxima (clave 0)**
+   Son las posiciones más estables del tablero: una vez ocupadas no pueden ser revertidas. Además, otorgan control duradero y seguridad posicional.
+   → Se procesan **primero** para permitir más poda.
+
+2. **Jugadas normales → prioridad media (clave 1)**
+   No están en esquinas ni en X-squares. Son generalmente seguras o neutras según el contexto.
+
+3. **X-squares (`X_SQUARES`) → prioridad baja (clave 2)**
+   Son peligrosas si se ocupan sin respaldo, ya que suelen permitir al oponente capturar una esquina inmediatamente después.
+   → Se evalúan **al final** para evitar jugadas que debiliten la posición.
 
 ## Minimax con Poda Alfa-Beta
 
 ```python
-def alphabeta(b, p, depth, α, β, start):
+def alphabeta(b, p, depth, alpha, beta, start):
     # Implementación clásica con poda y heurística
 ```
 
-### ¿Por qué?
+Esta función implementa el algoritmo **Minimax con poda alfa-beta** con las siguientes características:
 
-Permite tomar decisiones óptimas en juegos de suma cero, minimizando el número de nodos evaluados gracias a la poda. Se exploran primero las mejores jugadas para maximizar las podas.
+* Control de tiempo (*timeout*)
+* Ordenación de jugadas
+* Detección de turnos sin jugadas válidas
+* Evaluación exacta al final del juego
+* Uso de heurística
+
+### Explicación del Código
+
+1. **Corte por tiempo límite**
+   Si el tiempo restante es muy bajo (`< 0.05s`), se abandona la búsqueda y se retorna el valor heurístico del estado actual para evitar penalizaciones por demora:
+
+   ```python
+   if time.time() - start > TIME_LIMIT - 0.05:
+       return heuristic(b, player), None
+   ```
+
+2. **Chequeo de jugadas válidas**
+   Si el jugador actual no tiene movimientos posibles:
+
+   * Si el oponente tampoco tiene, se evalúa el tablero exactamente (conteo de fichas).
+   * Si el oponente sí tiene, se pasa el turno recursivamente.
+
+   ```python
+   if not moves:
+       ...
+   ```
+
+3. **Condición de profundidad**
+   Si la profundidad se agotó, se evalúa con la heurística:
+
+   ```python
+   if depth == 0:
+       return heuristic(b, player), None
+   ```
+
+4. **Exploración recursiva (Minimax)**
+
+   * Si el jugador es el agente (`player`): se comporta como **MAX**, buscando el mayor valor.
+   * Si el jugador es el oponente: actúa como **MIN**, buscando el menor valor.
+
+   En ambos casos:
+
+   * Se ordenan las jugadas con `order_moves()` (esquinas primero).
+   * Se aplican movimientos sobre una copia del tablero (`apply_move`).
+   * Se actualizan los valores de `alpha` y `beta`.
+   * Se realizan cortes si `alpha >= beta` (poda).
+
+   ```python
+   for m in order_moves(moves):
+       score, _ = alphabeta(...)
+       ...
+       if alpha >= beta:
+           break
+   ```
+
+#### Parámetros
+
+| Parámetro | Descripción                                                         |
+| --------- | ------------------------------------------------------------------- |
+| `b`       | Estado actual del tablero (matriz 8×8).                             |
+| `p`       | Jugador actual (`1` o `-1`).                                        |
+| `depth`   | Profundidad restante de búsqueda.                                   |
+| `alpha`   | Mejor valor que MAX puede garantizar hasta ahora.                   |
+| `beta`    | Mejor valor que MIN puede garantizar hasta ahora.                   |
+| `start`   | Marca de tiempo al inicio de la búsqueda (para control de timeout). |
 
 ## Extracción del Historial
 
@@ -266,6 +392,27 @@ Permite tomar decisiones óptimas en juegos de suma cero, minimizando el número
 def extract_history(b):
     # Detecta los dos primeros movimientos para el libro de aperturas
 ```
+
+Esta función detecta las primeras dos jugadas realizadas en la partida a partir del estado actual del tablero. Su propósito es permitir al agente IA consultar el libro de aperturas, que depende de reconocer patrones en las primeras jugadas.
+
+1. Se construye un tablero base `initial` con la posición estándar inicial de Othello:
+
+   * Fichas blancas en (3,3) y (4,4)
+   * Fichas negras en (3,4) y (4,3)
+
+2. Se recorre el tablero actual y se identifican las casillas que **difieren** de ese estado inicial:
+
+   ```python
+   moves = [(i, j) for i in range(8) for j in range(8) if b[i][j] != initial[i][j]]
+   ```
+
+3. Se devuelven las **primeras dos jugadas** encontradas, como una tupla `(move1, move2)`, o `None` si aún no hay suficientes movimientos para determinar una apertura válida:
+
+   ```python
+   return tuple(moves[:2]) if len(moves) >= 2 else None
+   ```
+
+Esto se hace con el fin de conocer la secuencia de jugadas al inicio del juego extrayendo la secuencia de jugadas sin necesidad de guardar un historial explícito de las mismas.
 
 ## Características del algoritmo
 
@@ -305,7 +452,7 @@ Los componentes del agente se basan en:
   * Combinan movilidad, posicionamiento y estabilidad.
 * **Exploración completa en estados pequeños**
 
-  * Cuando el espacio de búsqueda es pequeño (≤12 huecos), es posible jugar perfectamente (sin heurística).
+  * Cuando el espacio de búsqueda es pequeño (<=12 huecos), es posible jugar perfectamente (sin heurística).
 
 ## Referencias
 
