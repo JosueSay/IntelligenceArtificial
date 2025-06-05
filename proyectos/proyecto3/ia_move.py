@@ -2,15 +2,11 @@ def ai_move(board, player):
     """
     IA para Othello / Reversi con:
 
-        • heurística enriquecida  (esquinas, movilidad, zonas peligrosas…)
-        • poda alfa-beta con ordenación de jugadas
-        • profundidad adaptada  (medio-juego vs final   + barrido exacto)
-        • libros de apertura diferenciados por color
-        • control de “time-out” con jugada aleatoria
-
-    Se asume la existencia de:
-
-        valid_movements(board, player)  ->  list[(x, y)]
+        - heurística
+        - poda alfa-beta con ordenación de jugadas
+        - profundidad adaptada (medio-juego vs final + barrido exacto)
+        - libros de apertura diferenciados por color
+        - control de “time-out” con jugada aleatoria
 
     El tablero contiene  1 = blancas   |   -1 = negras   |   0 = vacío
     """
@@ -123,7 +119,7 @@ def ai_move(board, player):
         # Sin movimientos: pasa turno o final de partida
         if not moves:
             opp_moves = valid_movements(b, -p)
-            if not opp_moves:  # ambos pasan → evaluación exacta
+            if not opp_moves:  # ambos pasan
                 exact = sum(r.count(player) - r.count(-player) for r in b)
                 return exact, None
             return alphabeta(b, -p, depth, alpha, beta, start)[0] * -1, None
@@ -159,7 +155,7 @@ def ai_move(board, player):
     #               EXTRAER HISTÓRICO (2 primeras jugadas)
     # -------------------------------------------------------
     def extract_history(b):
-        """Devuelve las dos primeras jugadas ya realizadas (tupla) o None."""
+        """Extrae las primeras dos jugadas que ya se hicieron en la partida"""
         initial = [[0]*8 for _ in range(8)]
         initial[3][3] = initial[4][4] =  1   # blancas
         initial[3][4] = initial[4][3] = -1   # negras
@@ -205,25 +201,3 @@ def ai_move(board, player):
         print(f"[IA] Tiempo de cálculo: {time.time() - start:.3f}s")
 
     return best
-
-def move(board, player, x, y):
-    if (x, y) not in valid_movements(board, player):
-        return board  # Movimiento inválido, no se cambia nada
-
-    board[x][y] = player
-    opponent = -player
-
-    for dx, dy in DIRECTIONS:
-        i, j = x + dx, y + dy
-        path = []
-
-        while in_bounds(i, j) and board[i][j] == opponent:
-            path.append((i, j))
-            i += dx
-            j += dy
-
-        if path and in_bounds(i, j) and board[i][j] == player:
-            for px, py in path:
-                board[px][py] = player
-
-    return board

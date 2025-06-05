@@ -23,6 +23,10 @@ El sistema utiliza un algoritmo de búsqueda adversaria con múltiples técnica:
 * **Libros de apertura diferenciados por color**: permite jugadas sólidas al inicio según el jugador.
 * **Control de tiempo (time-out)**: asegura respuesta dentro del límite asignado; aplica jugada aleatoria como respaldo.
 
+Este código puede ser visualizado en el siguiente enlace:
+
+* [Enlace a Gist](https://gist.github.com/JosueSay/765ed1ac5d07780ee7d5a8be82551517)
+
 ## Pseudocódigo General del Agente
 
 1. Si no hay movimientos válidos, retorna `None`.
